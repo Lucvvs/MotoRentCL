@@ -1,0 +1,187 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+
+}
+
+
+h1 {
+    font-weight: bold;
+    color: #05c4ba;
+    background-color: #000000;
+    text-align: center;
+    border: 2px solid #05c4ba;
+    padding: 10px 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 12px rgba(5, 196, 186, 0.3);
+    display: inline-block;
+    margin: 30px auto;
+    z-index: 1;
+    position: relative;
+}
+
+
+h2 {
+    font-weight: 600;
+    color: #142423;
+    text-align: center;
+    font-size: 1.8rem;
+    z-index: 1;
+    position: relative;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.titulo-principal {
+    margin-top: 90px;
+   
+}
+
+/* NAV BAR *//* NAV BAR *//* NAV BAR *//* NAV BAR */
+/* NAV BAR *//* NAV BAR *//* NAV BAR *//* NAV BAR */
+
+.arreglo-navbar {
+    background-color: rgba(33, 37, 41, 0.85);
+    backdrop-filter: blur(3px);
+}
+
+
+/* Logo moto */
+.logo-moto {
+    width: 60px;
+    height: 40px;
+}
+
+/* Texto del logo */
+.logo-text span {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* Colores  */
+.moto {
+    color: white;
+}
+
+.rent {
+    color: #05c4ba;
+}
+
+.cl-c {
+    color: rgb(0, 0, 255);
+}
+
+.cl-l {
+    color: rgb(255, 0, 0);
+}
+
+.boton-arrendar {
+    padding: 6px 25px;
+    background-color: #212529;
+    color: #ffffff !important;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    border: 1px solid #ffffff;
+}
+
+.boton-arrendar:hover {
+    background-color: #05c4ba;
+    color: white !important;
+}
+
+
+/* Eslogan con brillo *//* Eslogan con brillo *//* Eslogan con brillo */
+/* Eslogan con brillo *//* Eslogan con brillo *//* Eslogan con brillo */
+
+
+
+.eslogan {
+    font-size: 1.2rem;
+    color: #000000;
+    text-align: center;
+    margin: 40px auto 20px auto;
+    z-index: 1;
+    animation: glowFade 1s ease-in-out infinite alternate;
+    max-width: 900px;
+}
+
+/* Sombra animada con cambio de tono */
+@keyframes glowFade {
+    0% {
+        text-shadow: 0 0 4px rgb(4, 243, 231);
+    }
+    50% {
+        text-shadow: 0 0 8px rgb(2, 119, 134);
+    }
+    100% {
+        text-shadow: 0 0 10px rgb(0, 0, 0);
+    }
+}
+
+/* CSS para caracteristicas *//* CSS para caracteristicas */
+/* CSS para caracteristicas *//* CSS para caracteristicas */
+/* CSS para caracteristicas *//* CSS para caracteristicas */
+
+
+
+.lista-destacada {
+    list-style-type: "✅ ";
+    font-size: 1.15rem; /* un poco más grande */
+    padding-left: 0;
+    line-height: 1.8;
+    color: #333;
+    z-index: 1;
+    position: relative;
+    margin-top: 50px;
+    
+    animation: movimiento-lateral 0.3s infinite;
+}
+
+/* Animación de movimiento lateral */
+@keyframes movimiento-lateral {
+    0%   { transform: translateX(0); }
+    50%  { transform: translateX(2px); }
+    100%  { transform: translateX(-2px); }
+    100% { transform: translateX(0); }
+}
+
+
+/* SPLASH DE MOTO *//* SPLASH DE MOTO *//* SPLASH DE MOTO */
+/* SPLASH DE MOTO *//* SPLASH DE MOTO *//* SPLASH DE MOTO */
+
+/* Pantalla completa al cargar */
+/* Pantalla completa y centrada */
+#moto-screen {
+    position: absolute;
+    top: 0%;
+    left: -300px; /* empieza fuera de la sección */
+    width: 100%;
+    height: 0;
+    z-index: 2; /* detrás del h1 */
+    pointer-events: none; /* no bloquea clics */
+}
+
+.moto-entrada {
+    width: 650px;
+    animation: cruzarPantalla 2.5s ease-in-out forwards;
+}
+
+@keyframes cruzarPantalla {
+    0% {
+        transform: translateX(-100%);
+        opacity: 1;
+    }
+    99% {
+        transform: translateX(400%); /* sale justo por el borde derecho */
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(405%); /* sale justo por el borde derecho */
+        opacity: 0;
+    }
+}
