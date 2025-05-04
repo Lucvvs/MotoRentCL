@@ -40,9 +40,17 @@
             <div id="moto-screen">
                 <img src="{% static 'img/moto-animada.png' %}" alt="Moto animada" class="moto-entrada">
               </div>
-            <h1 class="titulo-principal">¡Arrienda tu moto ideal!</h1>
-            <h2 class="eslogan">⭐ En MotoRentCL contamos con una amplia variedad de motocicletas para llevar a cabo tus más 
+
+                    <!-- TITULO CON IMAGEN Y DESCRIPCCION -->
+
+            <div class="contenedor-titulo">
+              <img src="{% static 'img/motosilueta.png' %}" alt="Silueta Moto" class="fondo-moto">
+              <img src="{% static 'img/arrienda.png' %}" alt="¡Arrienda tu moto ideal!" class="titulo-principal-img">            
+              <h2 class="eslogan">⭐ En MotoRentCL contamos con una amplia variedad de motocicletas para llevar a cabo tus más 
                 extensas y emocionantes aventuras a lo largo de todo Chile. De la forma más segura, económica, fácil y rápida del mercado ⭐</h2>
+            </div>
+
+
                 <div class="row justify-content-center">
                     <!-- Columna 1 -->
                     <div class="col-12 col-md-5 offset-md-1 mb-4 mb-md-0 text-start">
@@ -78,46 +86,81 @@
           </div>
         </section>
 
-    <main class="container my-5">
-        <div class="row">
-            <!-- Tarjeta 1 -->
-            <div class="col-12 col-md-6 col-lg-4 mb-4">
-                <div class="card h-100">
-                    <img src="https://via.placeholder.com/400x200?text=Moto+1" class="card-img-top" alt="Moto 1">
-                    <div class="card-body">
-                        <h5 class="card-title">Yamaha MT-07</h5>
-                        <p class="card-text">Naked ágil, ideal para ciudad.</p>
-                        <a href="#" class="btn btn-primary w-100">Reservar</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Tarjeta 2 -->
-            <div class="col-12 col-md-6 col-lg-4 mb-4">
-                <div class="card h-100">
-                    <img src="https://via.placeholder.com/400x200?text=Moto+2" class="card-img-top" alt="Moto 2">
-                    <div class="card-body">
-                        <h5 class="card-title">Honda CB500X</h5>
-                        <p class="card-text">Versátil para viajes largos.</p>
-                        <a href="#" class="btn btn-primary w-100">Reservar</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Tarjeta 3 -->
-            <div class="col-12 col-md-6 col-lg-4 mb-4">
-                <div class="card h-100">
-                    <img src="https://via.placeholder.com/400x200?text=Moto+3" class="card-img-top" alt="Moto 3">
-                    <div class="card-body">
-                        <h5 class="card-title">KTM Duke 390</h5>
-                        <p class="card-text">Potente y compacta, ideal para jóvenes.</p>
-                        <a href="#" class="btn btn-primary w-100">Reservar</a>
-                    </div>
-                </div>
-            </div>
+        <img src="{% static 'img/calidadgarantizada.png' %}" alt="Logo calidad" class="img-calidad">
+
+        <h2 class="logo-calidad">Trabajamos solo con las mejores marcas del mercado</h2>
+
+        <div class="scroll-marcas-container">
+          <div class="scroll-marcas-track">
+            {% for i in "20"|make_list %}  {# Duplicamos para el loop visual #}
+              {% for marca in marcas %}
+                <img src="{% static 'img/marcas/'|add:marca|add:'.png' %}" alt="{{ marca }}">
+              {% endfor %}
+            {% endfor %}
+          </div>
         </div>
-    </main>
+        <div class="text-center">
+          <div class="aventura-envuelta">
+              <img src="{% static 'img/aventurasizq.png' %}" alt="Izquierda" class="aventura-img">
+              <h2 class="logo-calidad2 mb-0">Para todo tipo de aventura</h2>
+              <img src="{% static 'img/aventurasder.png' %}" alt="Derecha" class="aventura-img">
+          </div>
+      </div>
+
+      <!-- seccion de tipos de moto para cada aventura -->
+      <section class="container my-5">
+        <h2 class="text-center mb-4">¿Cuál es tu estilo o necesidad para hoy?</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+          
+          <!-- Adventure -->
+          <div class="col">
+            <div class="card tipo-moto-card text-white">
+              <img src="{% static 'img/adventure.png' %}" class="card-img full-img" alt="Adventure">
+              <div class="card-img-overlay d-flex flex-column justify-content-end p-2 fondo-descripcion">
+                <h5 class="card-title">Adventure</h5>
+                <p class="card-text">Perfecta para viajes largos y terrenos mixtos.</p>
+              </div>
+            </div>
+          </div>
+      
+          <!-- Ciudad -->
+          <div class="col">
+            <div class="card tipo-moto-card text-white">
+              <img src="{% static 'img/ciudad.png' %}" class="card-img full-img" alt="Ciudad">
+              <div class="card-img-overlay d-flex flex-column justify-content-end p-2 fondo-descripcion">
+                <h5 class="card-title">Ciudad</h5>
+                <p class="card-text">Ágil y económica para moverte por la ciudad.</p>
+              </div>
+            </div>
+          </div>
+      
+          <!-- Deportiva -->
+          <div class="col">
+            <div class="card tipo-moto-card text-white">
+              <img src="{% static 'img/deportiva.png' %}" class="card-img full-img" alt="Deportiva">
+              <div class="card-img-overlay d-flex flex-column justify-content-end p-2 fondo-descripcion">
+                <h5 class="card-title">Deportiva</h5>
+                <p class="card-text">Potencia y velocidad para los amantes de la adrenalina.</p>
+              </div>
+            </div>
+          </div>
+      
+          <!-- Enduro -->
+          <div class="col">
+            <div class="card tipo-moto-card text-white">
+              <img src="{% static 'img/enduro.png' %}" class="card-img full-img" alt="Enduro">
+              <div class="card-img-overlay d-flex flex-column justify-content-end p-2 fondo-descripcion">
+                <h5 class="card-title">Enduro</h5>
+                <p class="card-text">Diseñada para dominar caminos difíciles y off-road.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
 
     <footer class="bg-dark text-white text-center py-3">
-        <p class="mb-0">&copy; 2025 MotoRentCL - Todos los derechos reservados</p>
+        <p class="mb-0">&copy; 2025 MotoRentCL - Todos los derechos reservados </p>
     </footer>
 
     <!-- Bootstrap JS -->
