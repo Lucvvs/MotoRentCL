@@ -1,3 +1,7 @@
+<!-- api consumida 1 https://restcountries.com/#endpoints-currency paises para formulario-->
+<!-- API consumida 2 https://www.api-ninjas.com/api/motorcycles mototicletas y caracteristicas (QUOTA LIMITADA)-->
+
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
@@ -9,7 +13,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- Tu CSS personalizado -->
+    <!--  CSS -->
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
@@ -92,9 +96,11 @@
 
         <div class="scroll-marcas-container">
           <div class="scroll-marcas-track">
-            {% for i in "20"|make_list %}  {# Duplicamos para el loop visual #}
+            {% for i in "20"|make_list %}
               {% for marca in marcas %}
-                <img src="{% static 'img/marcas/'|add:marca|add:'.png' %}" alt="{{ marca }}">
+                <a href="{% url 'arrendar' %}?marca={{ marca }}">
+                  <img src="{% static 'img/marcas/'|add:marca|add:'.png' %}" alt="{{ marca }}">
+                </a>
               {% endfor %}
             {% endfor %}
           </div>
@@ -111,50 +117,59 @@
       <section class="container my-5">
         <h2 class="text-center mb-4">¿Cuál es tu estilo o necesidad para hoy?</h2>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-          
+      
           <!-- Adventure -->
           <div class="col">
-            <div class="card tipo-moto-card text-white">
-              <img src="{% static 'img/adventure.png' %}" class="card-img full-img" alt="Adventure">
-              <div class="card-img-overlay d-flex flex-column justify-content-end p-2 fondo-descripcion">
-                <h5 class="card-title">Adventure</h5>
-                <p class="card-text">Perfecta para viajes largos y terrenos mixtos.</p>
+            <a href="{% url 'arrendar' %}?estilo=Adventure" class="text-decoration-none">
+              <div class="card tipo-moto-card text-white">
+                <img src="{% static 'img/adventure.png' %}" class="card-img full-img" alt="Adventure">
+                <div class="card-img-overlay d-flex flex-column justify-content-end p-2 fondo-descripcion">
+                  <h5 class="card-title">Adventure</h5>
+                  <p class="card-text">Perfecta para viajes largos y terrenos mixtos</p>
+                </div>
               </div>
-            </div>
+            </a>
           </div>
       
           <!-- Ciudad -->
           <div class="col">
-            <div class="card tipo-moto-card text-white">
-              <img src="{% static 'img/ciudad.png' %}" class="card-img full-img" alt="Ciudad">
-              <div class="card-img-overlay d-flex flex-column justify-content-end p-2 fondo-descripcion">
-                <h5 class="card-title">Ciudad</h5>
-                <p class="card-text">Ágil y económica para moverte por la ciudad.</p>
+            <a href="{% url 'arrendar' %}?estilo=Ciudad" class="text-decoration-none">
+              <div class="card tipo-moto-card text-white">
+                <img src="{% static 'img/ciudad.png' %}" class="card-img full-img" alt="Ciudad">
+                <div class="card-img-overlay d-flex flex-column justify-content-end p-2 fondo-descripcion">
+                  <h5 class="card-title">Ciudad</h5>
+                  <p class="card-text">Ágil y económica para moverte por la ciudad</p>
+                </div>
               </div>
-            </div>
+            </a>
           </div>
       
           <!-- Deportiva -->
           <div class="col">
-            <div class="card tipo-moto-card text-white">
-              <img src="{% static 'img/deportiva.png' %}" class="card-img full-img" alt="Deportiva">
-              <div class="card-img-overlay d-flex flex-column justify-content-end p-2 fondo-descripcion">
-                <h5 class="card-title">Deportiva</h5>
-                <p class="card-text">Potencia y velocidad para los amantes de la adrenalina.</p>
+            <a href="{% url 'arrendar' %}?estilo=Deportiva" class="text-decoration-none">
+              <div class="card tipo-moto-card text-white">
+                <img src="{% static 'img/deportiva.png' %}" class="card-img full-img" alt="Deportiva">
+                <div class="card-img-overlay d-flex flex-column justify-content-end p-2 fondo-descripcion">
+                  <h5 class="card-title">Deportiva</h5>
+                  <p class="card-text">Potencia y velocidad para los amantes de la adrenalina</p>
+                </div>
               </div>
-            </div>
+            </a>
           </div>
       
           <!-- Enduro -->
           <div class="col">
-            <div class="card tipo-moto-card text-white">
-              <img src="{% static 'img/enduro.png' %}" class="card-img full-img" alt="Enduro">
-              <div class="card-img-overlay d-flex flex-column justify-content-end p-2 fondo-descripcion">
-                <h5 class="card-title">Enduro</h5>
-                <p class="card-text">Diseñada para dominar caminos difíciles y off-road.</p>
+            <a href="{% url 'arrendar' %}?estilo=Enduro" class="text-decoration-none">
+              <div class="card tipo-moto-card text-white">
+                <img src="{% static 'img/enduro.png' %}" class="card-img full-img" alt="Enduro">
+                <div class="card-img-overlay d-flex flex-column justify-content-end p-2 fondo-descripcion">
+                  <h5 class="card-title">Enduro</h5>
+                  <p class="card-text">Diseñada para dominar caminos difíciles y off-road</p>
+                </div>
               </div>
-            </div>
+            </a>
           </div>
+      
         </div>
       </section>
 

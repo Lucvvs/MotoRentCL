@@ -1,74 +1,207 @@
-from django.shortcuts import render
+import concurrent
+from django.shortcuts import render, redirect
 import requests
+from .models import Motocicleta, UsuarioRegistro
+from django.utils.text import slugify
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
 
 API_KEY = '96DbFvqidfnd56ps1VdwpA==KGJebGeaPxidodno'
 
-def arrendar(request):
-    modelos_deseados = [
-        {'make': 'honda', 'model': 'cbr500r'},
-        {'make': 'honda', 'model': 'xr150l'},
-        {'make': 'honda', 'model': 'ADV150'},
-        {'make': 'honda', 'model': 'Africa Twin'},
+modelos_deseados = [
+    {'make': 'honda', 'model': 'cbr500r'},
+    {'make': 'honda', 'model': 'xr150l'},
+    {'make': 'honda', 'model': 'ADV150'},
+    {'make': 'honda', 'model': 'Africa Twin'},
+    {'make': 'yamaha', 'model': 'fzs 25'},
+    {'make': 'yamaha', 'model': 'mt-09'},
+    {'make': 'yamaha', 'model': 'aerox 155'},
+    {'make': 'yamaha', 'model': 'FJR1300AE'},
+    {'make': 'suzuki', 'model': 'dr 650 se'},
+    {'make': 'suzuki', 'model': 'gsx-r1000'},
+    {'make': 'suzuki', 'model': 'dr-z400sm'},
+    {'make': 'suzuki', 'model': 'Burgman 400'},
+    {'make': 'ktm', 'model': '1290 Super Duke GT'},
+    {'make': 'ktm', 'model': '450 EXC-F'},
+    {'make': 'ktm', 'model': '250 EXC TPI'},
+    {'make': 'ktm', 'model': '125 SX'},
+    {'make': 'kawasaki', 'model': 'Brute Force 300'},
+    {'make': 'kawasaki', 'model': 'Concours 14'},
+    {'make': 'kawasaki', 'model': 'KLR 650 Adventure'},
+    {'make': 'kawasaki', 'model': 'Ninja 650'},
+    {'make': 'bajaj', 'model': 'Avenger Cruise 220'},
+    {'make': 'bajaj', 'model': 'Pulsar RS200'},
+    {'make': 'bajaj', 'model': 'Pulsar NS200'},
+    {'make': 'bajaj', 'model': 'Dominar 400'},
+    {'make': 'bmw', 'model': 'F 850 GS Adventure'},
+    {'make': 'bmw', 'model': 'G 310 R'},
+    {'make': 'bmw', 'model': 'R 1250 R'},
+    {'make': 'bmw', 'model': 'C 400 GT'},
+    {'make': 'Husqvarna', 'model': '701 Supermoto'},
+    {'make': 'Husqvarna', 'model': 'Svartpilen 125'},
+    {'make': 'Husqvarna', 'model': 'FC 250'},
+    {'make': 'Husqvarna', 'model': 'Svartpilen 701'},
+]
 
-        {'make': 'yamaha', 'model': 'fzs 25'},
-        {'make': 'yamaha', 'model': 'mt-09'},
-        {'make': 'yamaha', 'model': 'aerox 155'},
-        {'make': 'yamaha', 'model': 'FJR1300AE'},
+# Diccionario de precios personalizados por modelo
+precios_modelos = {
+    "cbr500r": 50000,
+    "xr150l": 28000,
+    "adv150": 31000,
+    "africa twin": 87500,
+    "fzs 25": 32000,
+    "mt-09": 91500,
+    "aerox 155": 29500,
+    "fjr1300ae": 99000,
+    "dr 650 se": 81000,
+    "gsx-r1000": 84500,
+    "dr-z400sm": 49000,
+    "burgman 400": 40000,
+    "1290 super duke gt": 115000,
+    "450 exc-f": 67000,
+    "250 exc tpi": 40000,
+    "125 sx": 34500,
+    "brute force 300": 45000,
+    "concours 14": 98000,
+    "klr 650 adventure": 87000,
+    "ninja 650": 94000,
+    "avenger cruise 220": 37500,
+    "pulsar rs200": 60000,
+    "pulsar ns200": 49000,
+    "dominar 400": 58000,
+    "f 850 gs adventure": 108000,
+    "g 310 r": 50000,
+    "r 1250 r": 135000,
+    "c 400 gt": 56000,
+    "701 supermoto": 82000,
+    "svartpilen 125": 41500,
+    "fc 250": 87000,
+    "svartpilen 701": 78000,
+}
 
-        {'make': 'suzuki', 'model': 'dr 650 se'},
-        {'make': 'suzuki', 'model': 'gsx-r1000'},
-        {'make': 'suzuki', 'model': 'dr-z400sm'},
-        {'make': 'suzuki', 'model': 'Burgman 400'},
 
-        {'make': 'ktm', 'model': '1290 Super Duke GT'},
-        {'make': 'ktm', 'model': '450 EXC-F'},
-        {'make': 'ktm', 'model': '250 EXC TPI'},
-        {'make': 'ktm', 'model': '125 SX'},
+tipos_modelos = {
+    "cbr500r": "Deportiva",
+    "xr150l": "Adventure",
+    "adv150": "Ciudad",
+    "africa twin": "Adventure",
+    "fzs 25": "Ciudad",
+    "mt-09": "Ciudad",
+    "aerox 155": "Ciudad",
+    "fjr1300ae": "Deportiva",
+    "dr 650 se": "Enduro",
+    "gsx-r1000": "Deportiva",
+    "dr-z400sm": "Enduro",
+    "burgman 400": "Ciudad",
+    "1290 super duke gt": "Ciudad",
+    "450 exc-f": "Enduro",
+    "250 exc tpi": "Enduro",
+    "125 sx": "Enduro",
+    "brute force 300": "Enduro",
+    "concours 14": "Deportiva",
+    "klr 650 adventure": "Adventure",
+    "ninja 650": "Deportiva",
+    "avenger cruise 220": "Ciudad",
+    "pulsar rs200": "Deportiva",
+    "pulsar ns200": "Ciudad",
+    "dominar 400": "Adventure",
+    "f 850 gs adventure": "Adventure",
+    "g 310 r": "Ciudad",
+    "r 1250 r": "Deportiva",
+    "c 400 gt": "Ciudad",
+    "701 supermoto": "Enduro",
+    "svartpilen 125": "Ciudad",
+    "fc 250": "Enduro",
+    "svartpilen 701": "Ciudad"
+}
 
-        {'make': 'kawasaki', 'model': 'Brute Force 300'},
-        {'make': 'kawasaki', 'model': 'Concours 14'},
-        {'make': 'kawasaki', 'model': 'KLR 650 Adventure'},
-        {'make': 'kawasaki', 'model': 'Ninja 650'},
 
-        {'make': 'bajaj', 'model': 'Avenger Cruise 220'},
-        {'make': 'bajaj', 'model': 'Pulsar RS200'},
-        {'make': 'bajaj', 'model': 'Pulsar NS200'},
-        {'make': 'bajaj', 'model': 'Dominar 400'},
-
-        {'make': 'bmw', 'model': 'F 850 GS Adventure'},
-        {'make': 'bmw', 'model': 'G 310 R'},
-        {'make': 'bmw', 'model': 'R 1250 R'},
-        {'make': 'bmw', 'model': 'C 400 GT'},
-
-        {'make': 'Husqvarna', 'model': '701 Supermoto'},
-        {'make': 'Husqvarna', 'model': 'Svartpilen 125'},
-        {'make': 'Husqvarna', 'model': 'FC 250'},
-        {'make': 'Husqvarna', 'model': 'Svartpilen 701'},
-
-
-        
-    ]
-
-    motos_combinadas = []
-
-    for item in modelos_deseados:
-        url = f"https://api.api-ninjas.com/v1/motorcycles?make={item['make']}&model={item['model']}"
-        response = requests.get(url, headers={'X-Api-Key': API_KEY})
-
+def obtener_moto(item):
+    url = f"https://api.api-ninjas.com/v1/motorcycles?make={item['make']}&model={item['model']}"
+    headers = {'X-Api-Key': API_KEY}
+    try:
+        response = requests.get(url, headers=headers, timeout=5)
         if response.status_code == 200:
             datos = response.json()
-            # Filtrar coincidencia exacta de modelo
-            coincidencias = [
-                m for m in datos
-                if m['model'].strip().lower() == item['model'].strip().lower()
-            ]
-            # Elegir la más nueva (por año)
+            coincidencias = [m for m in datos if m['model'].strip().lower() == item['model'].strip().lower()]
             if coincidencias:
-                moto_mas_nueva = max(coincidencias, key=lambda m: m.get('year', 0))
-                motos_combinadas.append(moto_mas_nueva)
+                return max(coincidencias, key=lambda m: m.get('year', 0))
+    except:
+        pass
+    return None
+
+def llenar_db_si_vacia():
+    if Motocicleta.objects.count() == 0:
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            resultados = list(executor.map(obtener_moto, modelos_deseados))
+        for moto in resultados:
+            if moto:
+                modelo_key = moto['model'].strip().lower()
+                precio = int(precios_modelos.get(modelo_key, 45900))
+                tipo = tipos_modelos.get(modelo_key, "Otro")  # Agregamos el tipo aquí
+
+                Motocicleta.objects.create(
+                    make=moto['make'],
+                    model=moto['model'],
+                    year=moto.get('year'),
+                    power=moto.get('power', ''),
+                    gearbox=moto.get('gearbox', ''),
+                    cooling=moto.get('cooling', ''),
+                    precio=precio,
+                    tipo=tipo  
+                )
+
+def arrendar(request):
+    llenar_db_si_vacia()
+
+
+    # Obtener parámetros GET
+    marca = request.GET.get('marca')
+    estilo = request.GET.get('estilo')
+    orden = request.GET.get('orden')
+
+    # Base de datos de motos
+    motocicletas = Motocicleta.objects.all()
+
+    # Filtro por marca
+    if marca:
+        motocicletas = motocicletas.filter(make__iexact=marca)
+
+    # Filtro por tipo de moto (estilo)
+    if estilo:
+        motocicletas = motocicletas.filter(tipo__iexact=estilo)
+
+    # Orden por precio
+    if orden == 'asc':
+        motocicletas = motocicletas.order_by('precio')
+    elif orden == 'desc':
+        motocicletas = motocicletas.order_by('-precio')
+
+
+        # ✅ Diccionario de traducción
+    traducciones = {
+        "5-speed": "5-Velocidades",
+        "6-speed": "6-Velocidades",
+        "Automatic": "Automática",
+        "Liquid": "Líquida",
+        "Air": "Aire",
+        "Oil": "Aceite",
+        "Water": "Agua"
+    }
+
+    # ✅ Aplicar traducción
+    for moto in motocicletas:
+        moto.gearbox = traducciones.get(moto.gearbox, moto.gearbox)
+        moto.cooling = traducciones.get(moto.cooling, moto.cooling)
+
+    # Obtener marcas y estilos únicos
+    marcas = Motocicleta.objects.values_list('make', flat=True).distinct()
+    estilos = Motocicleta.objects.values_list('tipo', flat=True).distinct()
 
     return render(request, 'arrendar.html', {
-        'motocicletas': motos_combinadas
+        'motocicletas': motocicletas,
+        'marcas': marcas,
+        'estilos': estilos
     })
 
 def index(request):
@@ -78,7 +211,52 @@ def index(request):
 def contacto(request):
     return render(request, 'contacto.html')
 
-def registro(request):
+def registro_usuario(request):
+    if request.method == 'POST':
+        # reCAPTCHA
+        token = request.POST.get('g-recaptcha-response')
+        secret_key = '6LeTmS4rAAAAAC3HrSS6Rb9MtVrdyoM9hh0DTx2c'
+
+        respuesta = requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={'secret': secret_key, 'response': token}
+        )
+        resultado = respuesta.json()
+
+        if not resultado.get('success'):
+            messages.error(request, "Verifica que no eres un robot (captcha).")
+            return redirect('registro')
+
+        nombre = request.POST.get('nombre')
+        correo = request.POST.get('correo')
+        telefono = request.POST.get('telefono')
+        nacionalidad = request.POST.get('nacionalidad')
+        contrasena = request.POST.get('contrasena')
+        confirmar = request.POST.get('confirmar_contrasena')
+
+        # Validaciones
+        if contrasena != confirmar:
+            messages.error(request, "Las contraseñas no coinciden.")
+            return redirect('registro')
+
+        if UsuarioRegistro.objects.filter(correo=correo).exists():
+            messages.error(request, "Este correo ya está registrado.")
+            return redirect('registro')
+
+        contrasena_encriptada = make_password(contrasena)
+
+        nuevo_usuario = UsuarioRegistro(
+            nombre=nombre,
+            correo=correo,
+            telefono=telefono,
+            nacionalidad=nacionalidad,
+            contrasena=contrasena_encriptada
+        )
+        nuevo_usuario.save()
+
+        messages.success(request, "Registro exitoso. ¡Bienvenido!")
+        return redirect('login')
+
     return render(request, 'registro.html')
 
 def login(request):

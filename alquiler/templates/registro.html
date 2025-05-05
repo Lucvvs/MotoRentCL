@@ -1,0 +1,301 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro - MotoRentCL</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top arreglo-navbar">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center logo-text m-0" href="{% url 'index' %}">
+        <img src="{% static 'img/moto-icon.png' %}" alt="Logo Moto" class="logo-moto me-1">
+        <span class="moto">Moto</span>
+        <span class="rent">Rent</span>
+        <span class="cl-c">C</span><span class="cl-l">L</span>
+      </a>
+    <!-- Botones a la derecha -->
+    <div class="ms-auto d-flex gap-3 align-items-center">
+      <a href="{% url 'arrendar' %}" class="nav-link boton-arrendar">🏍️Alquilar🏍️</a>
+      <a href="{% url 'registro' %}" class="btn btn-outline-light">Registro</a>
+      <a href="{% url 'login' %}" class="btn btn-light text-dark">Login</a>
+      <a href="{% url 'contacto' %}" class="nav-link text-white">Contacto</a>
+
+      
+    </div>
+    
+  </div>
+</nav>
+
+  <!-- Formulario -->
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6">
+        <h2 class="eslogan mb-4">Regístrate en MotoRentCL y comienza tu aventura!</h2>
+
+        <form method="POST" class="p-4 border rounded bg-light shadow-sm" id="form-registro">
+          {% csrf_token %}
+  
+          <!-- Nombre completo -->
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre completo</label>
+            <input type="text" class="form-control input-registro" id="nombre" name="nombre" autocomplete="off" required>
+            <div class="form-error" id="error-nombre"></div>
+          </div>
+  
+          <!-- Correo -->
+          <div class="mb-3">
+            <label for="correo" class="form-label">Correo electrónico</label>
+            <input type="email" class="form-control input-registro" id="correo" name="correo" autocomplete="off" required>
+            <div class="form-error" id="error-correo"></div>
+          </div>
+  
+          <!-- Teléfono -->
+          <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input type="text" class="form-control input-registro" id="telefono" name="telefono" autocomplete="off" required>
+            <div class="form-error" id="error-telefono"></div>
+          </div>
+  
+          <!-- Nacionalidad -->
+          <div class="mb-3">
+            <label for="nacionalidad" class="form-label">Nacionalidad</label>
+            <select class="form-select input-registro" id="nacionalidad" name="nacionalidad" required>
+              <option value="">Seleccione su nacionalidad</option>
+            </select>
+            <div class="form-error" id="error-nacionalidad"></div>
+          </div>
+  
+          <!-- Contraseña -->
+          <div class="mb-3">
+            <label for="contrasena" class="form-label">Contraseña</label>
+            <div class="input-group">
+              <input type="password" class="form-control input-registro" id="contrasena" name="contrasena" autocomplete="off" required>
+              <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('contrasena')">👁️</button>
+            </div>
+            <div class="form-error" id="error-contrasena"></div>
+          </div>
+  
+          <!-- Confirmar contraseña -->
+          <div class="mb-4">
+            <label for="confirmar_contrasena" class="form-label">Confirmar contraseña</label>
+            <div class="input-group">
+              <input type="password" class="form-control input-registro" id="confirmar_contrasena" name="confirmar_contrasena" autocomplete="off" required>
+              <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('confirmar_contrasena')">👁️</button>
+            </div>
+            <div class="form-error" id="error-confirmar"></div>
+          </div>
+
+
+        <!-- reCAPTCHA -->
+        <div class="mb-3">
+         <div class="g-recaptcha" data-sitekey="6LeTmS4rAAAAAB54GPHEw74ISPf4v8fWJCQdau1q"></div>
+        </div>
+  
+          <!-- Slider de registro -->
+          <div class="slider-wrapper mt-4">
+            <div class="slider-track">
+              <div class="slider-thumb" id="sliderThumb">
+                <img src="{% static 'img/moto-icon.png' %}" alt="Moto" class="slider-icon" draggable="false">
+              </div>
+              <span class="slider-text">Desliza para registrarte</span>
+            </div>
+          </div>
+        </form>
+
+        <p class="text-center mt-3">¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión aquí</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-light text-center p-3">
+    &copy; 2025 MotoRentCL - Todos los derechos reservados.
+  </footer>
+
+  <!-- JavaScript del botón deslizable -->  <!-- JavaScript del botón deslizable -->
+  <!-- JavaScript del botón deslizable -->  <!-- JavaScript del botón deslizable -->
+  <!-- JavaScript del botón deslizable -->  <!-- JavaScript del botón deslizable -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.getElementById('form-registro');
+      const thumb = document.getElementById('sliderThumb');
+      const track = document.querySelector('.slider-track');
+    
+      // 👉 Cargar nacionalidades desde REST Countries API
+      fetch('https://restcountries.com/v3.1/all')
+        .then(res => res.json())
+        .then(data => {
+          const select = document.getElementById('nacionalidad');
+          const paises = data.map(p => p.name.common).sort();
+          paises.forEach(pais => {
+            const opt = document.createElement('option');
+            opt.value = pais;
+            opt.textContent = pais;
+            select.appendChild(opt);
+          });
+        });
+    
+      // 👉 Mostrar/ocultar contraseña
+      window.togglePassword = function(id) {
+        const input = document.getElementById(id);
+        input.type = input.type === 'password' ? 'text' : 'password';
+      };
+    
+      // 👉 Mensajes de error personalizados
+      function obtenerMensajeError(id) {
+        const mensajes = {
+          'error-nombre': 'Debe tener entre 8 y 35 caracteres, nombres y apellidos separados por espacio.',
+          'error-correo': 'Ingrese un correo electrónico válido.',
+          'error-telefono': 'El teléfono debe tener entre 8 y 12 números.',
+          'error-nacionalidad': 'Seleccione su nacionalidad o país de origen.',
+          'error-contrasena': 'La contraseña debe tener entre 8 y 20 caracteres, con al menos una letra y un número.',
+          'error-confirmar': 'Las contraseñas no coinciden.'
+        };
+        return mensajes[id];
+      }
+    
+      // 👉 Validación individual de campo
+      function validarCampo(idCampo, validacionFn) {
+        const valor = document.getElementById(idCampo).value.trim();
+        const errorElem = document.getElementById('error-' + idCampo);
+        const esValido = validacionFn(valor);
+        if (!esValido) {
+          errorElem.textContent = obtenerMensajeError('error-' + idCampo);
+          errorElem.style.display = 'block';
+        } else {
+          errorElem.style.display = 'none';
+        }
+      }
+    
+      // 👉 Asignar validaciones individuales
+      document.getElementById('nombre').addEventListener('input', () => {
+        validarCampo('nombre', val => val.length >= 8 && val.length <= 35 && (val.match(/\s/g) || []).length >= 2 && (val.match(/\s/g) || []).length <= 3);
+      });
+    
+      document.getElementById('correo').addEventListener('input', () => {
+        validarCampo('correo', val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val));
+      });
+    
+      document.getElementById('telefono').addEventListener('input', () => {
+        validarCampo('telefono', val => /^\d{8,12}$/.test(val));
+      });
+    
+      document.getElementById('nacionalidad').addEventListener('change', () => {
+        validarCampo('nacionalidad', val => val !== '');
+      });
+    
+      document.getElementById('contrasena').addEventListener('input', () => {
+        validarCampo('contrasena', val => val.length >= 8 && val.length <= 20 && /[A-Za-z]/.test(val) && /\d/.test(val));
+      });
+    
+      document.getElementById('confirmar_contrasena').addEventListener('input', () => {
+        const confirm = document.getElementById('confirmar_contrasena').value;
+        const pass = document.getElementById('contrasena').value;
+        const errorElem = document.getElementById('error-confirmar');
+        if (confirm !== pass) {
+          errorElem.textContent = obtenerMensajeError('error-confirmar');
+          errorElem.style.display = 'block';
+        } else {
+          errorElem.style.display = 'none';
+        }
+      });
+    
+      // 👉 Validación final al deslizar
+      function validarFormulario() {
+        const nombre = document.getElementById('nombre').value.trim();
+        const correo = document.getElementById('correo').value.trim();
+        const telefono = document.getElementById('telefono').value.trim();
+        const nacionalidad = document.getElementById('nacionalidad').value;
+        const pass = document.getElementById('contrasena').value;
+        const confirm = document.getElementById('confirmar_contrasena').value;
+    
+        let valido = true;
+    
+        if (!(nombre.length >= 8 && nombre.length <= 35 && (nombre.match(/\s/g) || []).length >= 2 && (nombre.match(/\s/g) || []).length <= 3)) {
+          validarCampo('nombre', () => false); valido = false;
+        }
+    
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+          validarCampo('correo', () => false); valido = false;
+        }
+    
+        if (!/^\d{8,12}$/.test(telefono)) {
+          validarCampo('telefono', () => false); valido = false;
+        }
+    
+        if (nacionalidad === '') {
+          validarCampo('nacionalidad', () => false); valido = false;
+        }
+    
+        if (!(pass.length >= 8 && pass.length <= 20 && /[A-Za-z]/.test(pass) && /\d/.test(pass))) {
+          validarCampo('contrasena', () => false); valido = false;
+        }
+    
+        if (pass !== confirm) {
+          const errorElem = document.getElementById('error-confirmar');
+          errorElem.textContent = obtenerMensajeError('error-confirmar');
+          errorElem.style.display = 'block';
+          valido = false;
+        }
+    
+        return valido;
+      }
+    
+      // 👉 Slider (moto deslizable)
+      let isDragging = false, startX = 0, currentX = 0;
+      const max = () => track.clientWidth - thumb.clientWidth;
+    
+      const setTranslateX = (x) => {
+        thumb.style.transform = `translateX(${x}px)`;
+      };
+    
+      thumb.addEventListener('pointerdown', e => {
+        isDragging = true;
+        startX = e.clientX;
+        thumb.setPointerCapture(e.pointerId);
+      });
+    
+      document.addEventListener('pointermove', e => {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        currentX = Math.max(0, Math.min(dx, max()));
+        setTranslateX(currentX);
+    
+        if (currentX >= max() - 10) {
+          isDragging = false;
+          setTranslateX(max());
+          if (validarFormulario()) {
+            setTimeout(() => form.submit(), 300);
+          } else {
+            setTimeout(() => setTranslateX(0), 300);
+          }
+        }
+      });
+    
+      document.addEventListener('pointerup', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        if (currentX < max() - 10) {
+          setTranslateX(0);
+        }
+      });
+    });
+
+    </script>
+
+    <!-- api google captcha-->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+
+</body>
+</html>

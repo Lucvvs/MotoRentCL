@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'alquiler'
+    'alquiler',
+    'django.contrib.humanize'
+    
 ]
 
 MIDDLEWARE = [
@@ -80,7 +82,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.oracle',
         'NAME': 'localhost:1521/XE',
-        'USER': 'MotoRent',
+        'USER': 'MotoRentCL',
         'PASSWORD': 'duoc',
     }
 }

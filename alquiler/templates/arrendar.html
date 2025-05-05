@@ -85,62 +85,76 @@
 <section class="container my-5">
   <h2 class="text-center mb-4">Motocicletas disponibles</h2>
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    {% for moto in motocicletas %}
-      <div class="col">
-        <div class="card moto-card text-white position-relative"
-             data-bs-toggle="modal"
-             data-bs-target="#modalMoto{{ forloop.counter0 }}">
-             <img
-             src="{% static 'img/motos/' %}{{ moto.model|slugify }}.png"
-             class="card-img full-img"
-             alt="{{ moto.model }}"
-           >
-          <div class="card-img-overlay d-flex flex-column justify-content-start p-2">
-            <h5 class="card-title bg-dark bg-opacity-75 px-2 py-1 rounded">
-              {{ moto.model }}<br>$ {{ moto.precio|default:"20000" }} CLP/día
-            </h5>
-          </div>
-        </div>
-      </div>
 
-      <!-- Modal -->
-      <div class="modal fade" id="modalMoto{{ forloop.counter0 }}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-          <div class="modal-content text-dark">
-            <div class="modal-header">
-              <h5 class="modal-title">{{ moto.make }} {{ moto.model }}</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body row">
-              <div class="col-md-6">
-                <img src="{% static 'img/motos/' %}{{ moto.model|slugify }}.png"
-     class="img-fluid rounded"
-     alt="{{ moto.model }}">
-                     
+    {% if motocicletas %}
+      {% for moto in motocicletas %}
+        <div class="col">
+          <!-- Enlace que activa el modal -->
+          <a href="#" data-bs-toggle="modal" data-bs-target="#modalMoto{{ forloop.counter0 }}" class="text-decoration-none">
+            <div class="card moto-card text-white position-relative">
+              <div class="franja-celeste"></div>
+              <img src="{% static 'img/motos/' %}{{ moto.model|slugify }}.png"
+                   class="full-img2"
+                   alt="{{ moto.model }}">
+              {% load humanize %}
+              <div class="card-img-overlay d-flex flex-column justify-content-start p-2">
+                <h5 class="card-title bg-dark bg-opacity-75 px-2 py-1 rounded">
+                  {{ moto.model }}<br>
+                  $ {{ moto.precio|floatformat:0 }} CLP/día
+                </h5>
               </div>
-              <div class="col-md-6">
-                <p><strong>Año:</strong> {{ moto.year }}</p>
-                <p><strong>Motor:</strong> {{ moto.engine }}</p>
-                <p><strong>Cilindrada:</strong> {{ moto.displacement }} cc</p>
-                <p><strong>Transmisión:</strong> {{ moto.transmission }}</p>
-                <p><strong>Combustible:</strong> {{ moto.fuel_type }}</p>
-                <p><strong>Precio:</strong> ${{ moto.precio|default:"20000" }} CLP por día</p>
-                <div class="d-flex gap-2 mt-4">
-                  <button class="btn btn-success">¡La quiero!</button>
-                  <button class="btn btn-secondary" data-bs-dismiss="modal">Seguir buscando motos</button>
+            </div>
+          </a>
+
+          <!-- Modal -->
+          <div class="modal fade" id="modalMoto{{ forloop.counter0 }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+              <div class="modal-content custom-modal">
+                <div class="modal-header custom-header">
+                  <h5 class="modal-title">{{ moto.make }} {{ moto.model }}</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body row custom-body">
+                  <div class="col-md-6">
+                    <img src="{% static 'img/motos/' %}{{ moto.model|slugify }}.png"
+                         class="img-fluid rounded"
+                         alt="{{ moto.model }}">
+                  </div>
+                  <div class="col-md-6">
+                    <p><strong>Año:</strong> {{ moto.year }}</p>
+                    <p><strong>Potencia:</strong> {{ moto.power|default:"No Especificada" }}</p>
+                    <p><strong>Transmisión:</strong> {{ moto.gearbox }}</p>
+                    <p><strong>Refrigeración:</strong> {{ moto.cooling }}</p>
+                    <p><strong>Precio:</strong> ${{ moto.precio|floatformat:0 }} CLP por día</p>
+                    <div class="d-flex gap-2 mt-4">
+                      <button class="btn btn-success">¡La quiero!</button>
+                      <button class="btn btn-secondary" data-bs-dismiss="modal">Seguir buscando</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      {% endfor %}
+      {% else %}
+      <div class="d-flex justify-content-center align-items-center" style="height: 300px; width: 100%;">
+        <div class="text-center p-4 border rounded bg-light shadow">
+          <h5>No hay motocicletas para estos filtros</h5>
+          <p>Intenta con otros criterios</p>
+          <a href="{% url 'arrendar' %}" class="btn btn-outline-primary mt-2">Limpiar filtros</a>
+        </div>
       </div>
-    {% endfor %}
+    {% endif %}
+
   </div>
 </section>
 
 
 {% endblock %}
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <footer class="bg-dark text-white text-center py-3">
      <p class="mb-0">&copy; 2025 MotoRentCL - Todos los derechos reservados </p>
