@@ -518,6 +518,7 @@ h2 {
 
   }
 
+  
   /* MODAL MOTO SELECCIONADA */
 
   .custom-modal {
@@ -545,7 +546,18 @@ h2 {
     border-radius: 0; /* evita sobresalir */
     padding: 1.5rem;
   }
+ 
 
+  /* IMG porfavor iniciar sesion */  /* IMG porfavor iniciar sesion */
+  /* IMG porfavor iniciar sesion */  /* IMG porfavor iniciar sesion */
+
+  .img-login {
+    max-width: 200px;
+    border: 2px solid #000;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    margin-top: -55px;
+  }
 
 
   /* CSS PARA registro */ /* CSS PARA registro */ /* CSS PARA registro */
@@ -656,3 +668,22 @@ h2 {
 
 
 
+/* RESERVA PAGO *//* RESERVA PAGO *//* RESERVA PAGO */
+/* RESERVA PAGO *//* RESERVA PAGO *//* RESERVA PAGO */
+
+.espaciado-sup {
+  margin-top: 200px;
+}
+
+.item-detalle {
+  margin-bottom: 10px;
+  padding: 6px 10px;
+  background-color: #f8f9fa; /* fondo gris claro */
+  border-left: 4px solid #04817b; /* línea azul Bootstrap */
+  border-radius: 4px;
+  font-size: 15px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.item-detalle strong {
+  color: #005153; /* azul Bootstrap */
+}

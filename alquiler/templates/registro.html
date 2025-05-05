@@ -26,11 +26,19 @@
     <!-- Botones a la derecha -->
     <div class="ms-auto d-flex gap-3 align-items-center">
       <a href="{% url 'arrendar' %}" class="nav-link boton-arrendar">🏍️Alquilar🏍️</a>
-      <a href="{% url 'registro' %}" class="btn btn-outline-light">Registro</a>
-      <a href="{% url 'login' %}" class="btn btn-light text-dark">Login</a>
+    
+      {% if request.session.usuario_nombre %}
+        <span class="text-warning fw-bold">{{ request.session.usuario_nombre }}</span>
+        <form action="{% url 'logout' %}" method="POST" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-light text-dark">Cerrar sesión</button>
+        </form>
+      {% else %}
+        <a href="{% url 'registro' %}" class="btn btn-outline-light">Registro</a>
+        <a href="{% url 'login' %}" class="btn btn-light text-dark">Login</a>
+      {% endif %}
+    
       <a href="{% url 'contacto' %}" class="nav-link text-white">Contacto</a>
-
-      
     </div>
     
   </div>
@@ -117,10 +125,20 @@
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer class="bg-dark text-light text-center p-3">
-    &copy; 2025 MotoRentCL - Todos los derechos reservados.
-  </footer>
+ <!-- footer -->
+ <footer>
+  <div style="height: 3px; background-color: #01857e;"></div>
+
+  <!-- info footer -->
+  <div style="background-color: #c2c2c2;" class="text-dark text-center py-2">
+    <p class="mb-1 fw-semibold">&copy; 2025 <strong>MotoRentCL</strong> - Todos los derechos reservados</p>
+    <p class="mb-0 small">
+      <strong>📞Ventas:</strong> +56 9 821 444 &nbsp;|&nbsp;
+      <strong>🏢Casa Matriz:</strong> Av. Lo Prado #3131 &nbsp;|&nbsp;
+      <strong>🚨Emergencias:</strong> +56 2 800 800 161
+    </p>
+  </div>
+</footer>
 
   <!-- JavaScript del botón deslizable -->  <!-- JavaScript del botón deslizable -->
   <!-- JavaScript del botón deslizable -->  <!-- JavaScript del botón deslizable -->
@@ -131,7 +149,7 @@
       const thumb = document.getElementById('sliderThumb');
       const track = document.querySelector('.slider-track');
     
-      // 👉 Cargar nacionalidades desde REST Countries API
+      // nacinoalidades dedsde api
       fetch('https://restcountries.com/v3.1/all')
         .then(res => res.json())
         .then(data => {
@@ -145,13 +163,13 @@
           });
         });
     
-      // 👉 Mostrar/ocultar contraseña
+      //Mostrar contraseña
       window.togglePassword = function(id) {
         const input = document.getElementById(id);
         input.type = input.type === 'password' ? 'text' : 'password';
       };
     
-      // 👉 Mensajes de error personalizados
+      // error mensajes
       function obtenerMensajeError(id) {
         const mensajes = {
           'error-nombre': 'Debe tener entre 8 y 35 caracteres, nombres y apellidos separados por espacio.',
@@ -163,8 +181,7 @@
         };
         return mensajes[id];
       }
-    
-      // 👉 Validación individual de campo
+
       function validarCampo(idCampo, validacionFn) {
         const valor = document.getElementById(idCampo).value.trim();
         const errorElem = document.getElementById('error-' + idCampo);
@@ -177,7 +194,6 @@
         }
       }
     
-      // 👉 Asignar validaciones individuales
       document.getElementById('nombre').addEventListener('input', () => {
         validarCampo('nombre', val => val.length >= 8 && val.length <= 35 && (val.match(/\s/g) || []).length >= 2 && (val.match(/\s/g) || []).length <= 3);
       });
@@ -210,7 +226,7 @@
         }
       });
     
-      // 👉 Validación final al deslizar
+      // vaidar para deslizar
       function validarFormulario() {
         const nombre = document.getElementById('nombre').value.trim();
         const correo = document.getElementById('correo').value.trim();
@@ -218,6 +234,7 @@
         const nacionalidad = document.getElementById('nacionalidad').value;
         const pass = document.getElementById('contrasena').value;
         const confirm = document.getElementById('confirmar_contrasena').value;
+        const recaptcha = grecaptcha.getResponse();
     
         let valido = true;
     
@@ -248,10 +265,16 @@
           valido = false;
         }
     
-        return valido;
-      }
+        // ✅ Validación reCAPTCHA
+        if (recaptcha.length === 0) {
+         alert("Por favor completa el código reCAPTCHA.");
+         valido = false;
+        }
+
+  return valido;
+}
     
-      // 👉 Slider (moto deslizable)
+      // slider
       let isDragging = false, startX = 0, currentX = 0;
       const max = () => track.clientWidth - thumb.clientWidth;
     
@@ -290,6 +313,7 @@
         }
       });
     });
+
 
     </script>
 

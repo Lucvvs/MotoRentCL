@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Contacto - MotoRentCL</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+  <!-- Navbar igual al de tus otras páginas -->
+  <nav class="navbar navbar-expand-lg fixed-top arreglo-navbar">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center logo-text m-0" href="{% url 'index' %}">
+        <img src="{% static 'img/moto-icon.png' %}" alt="Logo Moto" class="logo-moto me-1">
+        <span class="moto">Moto</span><span class="rent">Rent</span><span class="cl-c">C</span><span class="cl-l">L</span>
+      </a>
+      <div class="ms-auto d-flex gap-3 align-items-center">
+        <a href="{% url 'arrendar' %}" class="nav-link boton-arrendar">🏍️Alquilar🏍️</a>
+        {% if request.session.usuario_nombre %}
+          <span class="text-warning fw-bold">{{ request.session.usuario_nombre }}</span>
+          <form action="{% url 'logout' %}" method="POST" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-light text-dark">Cerrar sesión</button>
+          </form>
+        {% else %}
+          <a href="{% url 'registro' %}" class="btn btn-outline-light">Registro</a>
+          <a href="{% url 'login' %}" class="btn btn-light text-dark">Login</a>
+        {% endif %}
+        <a href="{% url 'contacto' %}" class="nav-link text-white">Contacto</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container my-5 pt-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6">
+        <h2 class="eslogan mb-4 text-center">Contáctanos</h2>
+
+        <!-- Mostrar errores de validación -->
+        {% if form.errors %}
+          <div class="alert alert-danger">
+            Por favor corrige los errores en el formulario.
+          </div>
+        {% endif %}
+
+        <form method="POST" class="p-4 border rounded bg-light shadow-sm" id="form-contacto">
+            {% csrf_token %}
+          
+            <!-- Nombre -->
+            <div class="mb-3">
+              <label for="id_nombre" class="form-label">Nombre completo</label>
+              {{ form.nombre }}
+              {% if form.nombre.errors %}
+                <div class="form-error">{{ form.nombre.errors.0 }}</div>
+              {% endif %}
+            </div>
+          
+            <!-- Correo -->
+            <div class="mb-3">
+              <label for="id_correo" class="form-label">Correo electrónico</label>
+              {{ form.correo }}
+              {% if form.correo.errors %}
+                <div class="form-error">{{ form.correo.errors.0 }}</div>
+              {% endif %}
+            </div>
+          
+            <!-- Celular -->
+            <div class="mb-3">
+              <label for="id_celular" class="form-label">Celular</label>
+              {{ form.celular }}
+              {% if form.celular.errors %}
+                <div class="form-error">{{ form.celular.errors.0 }}</div>
+              {% endif %}
+            </div>
+          
+            <!-- Asunto -->
+            <div class="mb-3">
+              <label for="id_asunto" class="form-label">Asunto</label>
+              {{ form.asunto }}
+              {% if form.asunto.errors %}
+                <div class="form-error">{{ form.asunto.errors.0 }}</div>
+              {% endif %}
+            </div>
+          
+            <!-- Detalles -->
+            <div class="mb-4">
+              <label for="id_mensaje" class="form-label">Detalles de tu solicitud</label>
+              {{ form.mensaje }}
+              {% if form.mensaje.errors %}
+                <div class="form-error">{{ form.mensaje.errors.0 }}</div>
+              {% endif %}
+            </div>
+          
+            <!-- Botones -->
+            <div class="d-flex justify-content-between">
+              <button type="submit" class="btn btn-primary">Enviar</button>
+              <button type="reset" class="btn btn-secondary">Borrar Campos</button>
+            </div>
+          </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <footer>
+    <div style="height: 3px; background-color: #01857e;"></div>
+  
+    <!-- info footer -->
+    <div style="background-color: #c2c2c2;" class="text-dark text-center py-2">
+      <p class="mb-1 fw-semibold">&copy; 2025 <strong>MotoRentCL</strong> - Todos los derechos reservados</p>
+      <p class="mb-0 small">
+        <strong>📞Ventas:</strong> +56 9 821 444 &nbsp;|&nbsp;
+        <strong>🏢Casa Matriz:</strong> Av. Lo Prado #3131 &nbsp;|&nbsp;
+        <strong>🚨Emergencias:</strong> +56 2 800 800 161
+      </p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

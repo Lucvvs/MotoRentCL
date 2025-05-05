@@ -35,3 +35,45 @@ class UsuarioRegistro(models.Model):
 
     def __str__(self):
         return f"{self.nombre} ({self.correo})"
+    
+
+
+
+class Contacto(models.Model):
+    OPCIONES_ASUNTO = [
+        ('reclamo',     'Reclamo'),
+        ('sugerencia',  'Sugerencia'),
+        ('consulta',    'Consulta'),
+        ('otro',        'Otro'),
+    ]
+
+    nombre       = models.CharField(max_length=100)
+    correo       = models.EmailField()
+    celular      = models.CharField(max_length=15)
+    asunto       = models.CharField(max_length=20, choices=OPCIONES_ASUNTO)
+    mensaje = models.TextField()  
+    fecha_envio  = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.nombre} – {self.get_asunto_display()}"
+    
+
+
+
+class Reserva(models.Model):
+    motocicleta = models.ForeignKey(Motocicleta, on_delete=models.CASCADE)
+    nombre_cliente = models.CharField(max_length=100)
+    correo = models.EmailField()
+    fecha_inicio = models.DateField()
+    fecha_fin = models.DateField()
+    creado = models.DateTimeField(auto_now_add=True)
+    total = models.IntegerField(null=True, blank=True)  # Nuevo campo
+
+    def dias_reserva(self):
+        return (self.fecha_fin - self.fecha_inicio).days + 1  # incluye ambos días
+
+    def total_pagar(self):
+        return self.dias_reserva() * self.motocicleta.precio
+
+    def __str__(self):
+        return f"Reserva de {self.motocicleta} por {self.nombre_cliente}"

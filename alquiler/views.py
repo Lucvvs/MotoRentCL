@@ -1,10 +1,15 @@
 import concurrent
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 import requests
-from .models import Motocicleta, UsuarioRegistro
+from .models import Motocicleta, UsuarioRegistro, Reserva
 from django.utils.text import slugify
 from django.contrib import messages
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
+from .forms import ContactoForm, ReservaForm
+from datetime import timedelta
 
 API_KEY = '96DbFvqidfnd56ps1VdwpA==KGJebGeaPxidodno'
 
@@ -243,14 +248,13 @@ def registro_usuario(request):
             messages.error(request, "Este correo ya está registrado.")
             return redirect('registro')
 
-        contrasena_encriptada = make_password(contrasena)
 
         nuevo_usuario = UsuarioRegistro(
             nombre=nombre,
             correo=correo,
             telefono=telefono,
             nacionalidad=nacionalidad,
-            contrasena=contrasena_encriptada
+            contrasena=contrasena
         )
         nuevo_usuario.save()
 
@@ -259,5 +263,112 @@ def registro_usuario(request):
 
     return render(request, 'registro.html')
 
-def login(request):
+
+# login de usuario dioreccionado a inicio # login de usuario dioreccionado a inicio 
+# login de usuario dioreccionado a inicio # login de usuario dioreccionado a inicio 
+# login de usuario dioreccionado a inicio # login de usuario dioreccionado a inicio 
+
+def login_usuario(request):
+    if request.method == 'POST':
+        correo = request.POST.get('correo', '').strip()
+        contrasena = request.POST.get('contrasena', '')
+
+        try:
+            usuario = UsuarioRegistro.objects.get(correo=correo)
+        except UsuarioRegistro.DoesNotExist:
+            messages.error(request, "Correo o contraseña incorrectos.")
+            return redirect('login')
+
+        # Validar con check_password
+        if check_password(contrasena, usuario.contrasena):
+            # Guardar datos mínimos en sesión
+            request.session['usuario_id']     = usuario.id
+            request.session['usuario_nombre'] = usuario.nombre
+            request.session['usuario_correo'] = usuario.correo
+
+            messages.success(request, f"¡Bienvenido de vuelta, {usuario.nombre}!")
+            return redirect('index')
+        else:
+            messages.error(request, "Correo o contraseña incorrectos.")
+            return redirect('login')
+
     return render(request, 'login.html')
+
+
+
+# cerrar sesion# cerrar sesion# cerrar sesion# cerrar sesion
+# cerrar sesion# cerrar sesion# cerrar sesion# cerrar sesion
+
+
+@csrf_exempt  # solo si no estás usando {% csrf_token %}, aunque aquí sí lo usamos
+def logout_usuario(request):
+    if request.method == 'POST':
+        request.session.flush()  # Elimina toda la sesión
+        messages.success(request, "Sesión cerrada correctamente.")
+        return redirect('index')
+    return redirect('index')
+
+
+
+
+def contacto_usuario(request):
+    if request.method == 'POST':
+        form = ContactoForm(request.POST)
+        if form.is_valid():
+            contacto = form.save()
+            messages.success(request,
+                f"Gracias por tu mensaje, {contacto.nombre}. Te contactaremos al correo y/o teléfono ingresado dentro de las proximas 48 horas!"
+            )
+            return redirect('index')
+    else:
+        form = ContactoForm()
+    return render(request, 'contacto.html', {'form': form})
+
+
+
+def reserva_moto(request, moto_id):
+    moto = get_object_or_404(Motocicleta, id=moto_id)
+
+    # Traducciones de gearbox y cooling
+    traducciones = {
+        "5-speed": "5-Velocidades",
+        "6-speed": "6-Velocidades",
+        "Automatic": "Automática",
+        "Liquid": "Líquida",
+        "Air": "Aire",
+        "Oil": "Aceite",
+        "Water": "Agua"
+    }
+    moto.gearbox = traducciones.get(moto.gearbox, moto.gearbox)
+    moto.cooling  = traducciones.get(moto.cooling, moto.cooling)
+
+    if request.method == 'POST':
+        form = ReservaForm(request.POST)
+        if form.is_valid():
+            reserva = form.save(commit=False)
+            reserva.motocicleta   = moto
+            reserva.nombre_cliente = request.session.get('usuario_nombre', '')
+            reserva.correo         = request.session.get('usuario_correo', '')
+            reserva.total          = reserva.total_pagar()
+            reserva.save()
+
+            # ¿Qué acción pidió el usuario?
+            accion = request.POST.get('accion')
+            if accion == 'reservar':
+                messages.success(request, '🔥 Reserva realizada con éxito. ¡Gracias por preferir MotoRentCL! 🏍️')
+            elif accion == 'pagar':
+                messages.success(request, '💳 Pago realizado con éxito. Revisa tu correo para más detalles. ¡Gracias! 🔥🏍️💨')
+
+            return redirect('index')
+
+    else:
+        # GET — precargamos nombre y correo
+        form = ReservaForm(initial={
+            'nombre_cliente': request.session.get('usuario_nombre', ''),
+            'correo':         request.session.get('usuario_correo', '')
+        })
+
+    return render(request, 'reserva.html', {
+        'moto': moto,
+        'form': form
+    })
