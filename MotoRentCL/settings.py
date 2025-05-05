@@ -32,7 +32,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'alquiler',
-    'django.contrib.humanize'
+    'django.contrib.humanize',
+    'MotoRentCL',
+    'rest_framework',
     
 ]
 
