@@ -1,5 +1,6 @@
 from django import forms
-from .models import Contacto, Reserva
+from .models import Contacto, Reserva, UsuarioRegistro
+
 
 class ContactoForm(forms.ModelForm):
     class Meta:
@@ -28,3 +29,22 @@ class ReservaForm(forms.ModelForm):
             'fecha_inicio': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'fecha_fin': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
         }
+
+
+
+
+class UsuarioForm(forms.ModelForm):
+    contrasena = forms.CharField(
+        label='Contraseña',
+        widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
+        required=False
+    )
+
+    class Meta:
+        model = UsuarioRegistro
+        fields = ['nombre', 'correo', 'telefono', 'nacionalidad', 'contrasena']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # ✅ Deja el campo contraseña vacío, aunque el usuario tenga un valor en DB
+        self.fields['contrasena'].initial = ''

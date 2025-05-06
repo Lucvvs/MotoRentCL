@@ -687,3 +687,26 @@ h2 {
 .item-detalle strong {
   color: #005153; /* azul Bootstrap */
 }
+
+
+.btn-nombre-usuario {
+  background-color: #07fff3; /* color tipo btn-warning */
+  color: #000;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-nombre-usuario:hover {
+  background-color: #e0a800; /* un tono más oscuro al pasar el mouse */
+  color: rgb(0, 0, 0);
+}
+
+
+.img-motoalq {
+  width: 100%;                 /* Ajusta a contenedor, puedes usar 70% si quieres más pequeño */
+  max-width: 500px;            /* Máximo tamaño para que no se pase */
+  height: auto;                /* Mantiene proporciones */
+  border-radius: 20px;         /* Bordes redondeados */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8); /* Sombra intensa */
+  display: block;
+}

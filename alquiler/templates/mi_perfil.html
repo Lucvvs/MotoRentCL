@@ -1,0 +1,200 @@
+{% load static %}
+{% load form_filters %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mi Perfil - MotoRentCL</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg fixed-top arreglo-navbar">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center logo-text m-0" href="{% url 'index' %}">
+      <img src="{% static 'img/moto-icon.png' %}" alt="Logo Moto" class="logo-moto me-1">
+      <span class="moto">Moto</span><span class="rent">Rent</span><span class="cl-c">C</span><span class="cl-l">L</span>
+    </a>
+    <div class="ms-auto d-flex gap-3 align-items-center">
+      <a href="{% url 'arrendar' %}" class="nav-link boton-arrendar">🏍️Alquilar🏍️</a>
+      {% if request.session.usuario_nombre %}
+        <a href="{% url 'mi_perfil' %}" class="btn btn-nombre-usuario fw-bold">{{ request.session.usuario_nombre }}</a>
+        <form action="{% url 'logout' %}" method="POST" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-light text-dark">Cerrar sesión</button>
+        </form>
+      {% else %}
+        <a href="{% url 'registro' %}" class="btn btn-outline-light">Registro</a>
+        <a href="{% url 'login' %}" class="btn btn-light text-dark">Login</a>
+      {% endif %}
+      <a href="{% url 'contacto' %}" class="nav-link text-white">Contacto</a>
+    </div>
+  </div>
+</nav>
+
+<div style="margin-top: 100px;"></div>
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h2 class="text-center mb-4">Mi Perfil</h2>
+
+      <form method="POST" class="p-4 border rounded shadow bg-light" novalidate>
+        {% csrf_token %}
+
+        {% for field in form %}
+          <div class="mb-3">
+            <label class="form-label">{{ field.label }}</label>
+
+            {% if field.name == 'contrasena' %}
+              <div class="input-group">
+                {{ field|add_class:"form-control rounded-start-pill shadow-sm" }}
+                <button type="button" class="btn btn-outline-secondary rounded-end-pill" onclick="togglePassword()">👁️</button>
+              </div>
+              <div id="error-contrasena" class="text-danger small mt-1" style="display: none;"></div>
+
+            {% elif field.name == 'nacionalidad' %}
+              <select id="id_nacionalidad" name="nacionalidad" class="form-select rounded-pill shadow-sm">
+                <option value="">Seleccione...</option>
+              </select>
+              <div id="error-nacionalidad" class="text-danger small mt-1" style="display: none;"></div>
+
+            {% else %}
+              {{ field|add_class:"form-control rounded-pill shadow-sm" }}
+              <div id="error-{{ field.name }}" class="text-danger small mt-1" style="display: none;"></div>
+            {% endif %}
+
+            {% if field.errors %}
+              <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        <!-- Confirmar contraseña -->
+        <div class="mb-3">
+          <label for="confirmar_contrasena" class="form-label">Confirmar Contraseña</label>
+          <div class="input-group">
+            <input type="password" id="confirmar_contrasena" class="form-control rounded-start-pill shadow-sm">
+            <button type="button" class="btn btn-outline-secondary rounded-end-pill" onclick="toggleConfirm()">👁️</button>
+          </div>
+          <div id="error-confirmar" class="text-danger small mt-1" style="display: none;"></div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+          <button type="submit" class="btn btn-success px-4">Guardar Cambios</button>
+          <a href="{% url 'eliminar_usuario' %}" class="btn btn-danger"
+             onclick="return confirm('¿Estás seguro de eliminar tu cuenta? Esta acción no se puede deshacer.')">
+            Eliminar Cuenta
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="mt-5">
+  <div style="height: 3px; background-color: #01857e;"></div>
+  <div style="background-color: #c2c2c2;" class="text-dark text-center py-2">
+    <p class="mb-1 fw-semibold">&copy; 2025 <strong>MotoRentCL</strong> - Todos los derechos reservados</p>
+    <p class="mb-0 small">
+      <strong>📞Ventas:</strong> +56 9 821 444 &nbsp;|&nbsp;
+      <strong>🏢Casa Matriz:</strong> Av. Lo Prado #3131 &nbsp;|&nbsp;
+      <strong>🚨Emergencias:</strong> +56 2 800 800 161
+    </p>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script>
+  function togglePassword() {
+    const pass = document.getElementById('id_contrasena');
+    pass.type = pass.type === 'password' ? 'text' : 'password';
+  }
+
+  function toggleConfirm() {
+    const confirm = document.getElementById('confirmar_contrasena');
+    confirm.type = confirm.type === 'password' ? 'text' : 'password';
+  }
+
+  function obtenerMensajeError(id) {
+    const mensajes = {
+      'error-nombre': 'Debe tener entre 8 y 35 caracteres, nombres y apellidos separados por espacio.',
+      'error-correo': 'Ingrese un correo electrónico válido.',
+      'error-telefono': 'El teléfono debe tener entre 8 y 12 números.',
+      'error-nacionalidad': 'Seleccione su nacionalidad o país de origen.',
+      'error-contrasena': 'La contraseña debe tener entre 8 y 20 caracteres, con al menos una letra y un número.',
+      'error-confirmar': 'Las contraseñas no coinciden.'
+    };
+    return mensajes[id];
+  }
+
+  function validarCampo(idCampo, validacionFn) {
+    const valor = document.getElementById(idCampo)?.value.trim();
+    const errorElem = document.getElementById('error-' + idCampo);
+    const esValido = validacionFn(valor);
+    if (!esValido) {
+      errorElem.textContent = obtenerMensajeError('error-' + idCampo);
+      errorElem.style.display = 'block';
+    } else {
+      errorElem.style.display = 'none';
+    }
+  }
+
+  document.getElementById('nombre').addEventListener('input', () => {
+    validarCampo('nombre', val => val.length >= 8 && val.length <= 35 && (val.match(/\s/g) || []).length >= 2);
+  });
+
+  document.getElementById('correo').addEventListener('input', () => {
+    validarCampo('correo', val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val));
+  });
+
+  document.getElementById('telefono').addEventListener('input', () => {
+    validarCampo('telefono', val => /^\d{8,12}$/.test(val));
+  });
+
+  document.getElementById('contrasena').addEventListener('input', () => {
+    validarCampo('contrasena', val => val.length >= 8 && val.length <= 20 && /[A-Za-z]/.test(val) && /\d/.test(val));
+  });
+
+  document.getElementById('confirmar_contrasena').addEventListener('input', () => {
+    const confirm = document.getElementById('confirmar_contrasena').value;
+    const pass = document.getElementById('contrasena').value;
+    const errorElem = document.getElementById('error-confirmar');
+    if (confirm !== pass) {
+      errorElem.textContent = obtenerMensajeError('error-confirmar');
+      errorElem.style.display = 'block';
+    } else {
+      errorElem.style.display = 'none';
+    }
+  });
+
+
+</script>
+
+<script>
+  // Cargar nacionalidades desde la API
+  fetch('https://restcountries.com/v3.1/all')
+    .then(res => res.json())
+    .then(data => {
+      const select = document.getElementById('id_nacionalidad');
+      const paises = data.map(p => p.name.common).sort();
+
+      paises.forEach(pais => {
+        const opt = document.createElement('option');
+        opt.value = pais;
+        opt.textContent = pais;
+        select.appendChild(opt);
+      });
+
+      // Marcar el valor actual del usuario
+      const actual = "{{ form.nacionalidad.value|escapejs }}";
+      if (actual) select.value = actual;
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

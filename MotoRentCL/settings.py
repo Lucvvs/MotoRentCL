@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'alquiler',
     'django.contrib.humanize',
-    'MotoRentCL',
+    'MotoRentCL.apps.MotorentclConfig',
     'rest_framework',
     
 ]

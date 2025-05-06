@@ -18,6 +18,13 @@ class Motocicleta(models.Model):
     
 
 
+class TipoUsuario(models.Model):
+    codigo = models.IntegerField(unique=True)  # 0 = usuario, 1 = admin
+    descripcion = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.descripcion
+
 
 class UsuarioRegistro(models.Model):
     nombre = models.CharField(max_length=100)
@@ -25,7 +32,9 @@ class UsuarioRegistro(models.Model):
     telefono = models.CharField(max_length=12)
     nacionalidad = models.CharField(max_length=50)
     contrasena = models.CharField(max_length=128)  # Encriptada
+    tipo_usuario = models.ForeignKey(TipoUsuario, on_delete=models.SET_NULL, null=True)
     fecha_registro = models.DateTimeField(default=timezone.now)
+    
 
     def save(self, *args, **kwargs):
         # Encripta la contraseña antes de guardar (solo si no está encriptada aún)
@@ -58,7 +67,10 @@ class Contacto(models.Model):
         return f"{self.nombre} – {self.get_asunto_display()}"
     
 
-
+ESTADOS_PAGO = [
+    ('PENDIENTE', 'Pendiente'),
+    ('PAGADO', 'Pagado'),
+]
 
 class Reserva(models.Model):
     motocicleta = models.ForeignKey(Motocicleta, on_delete=models.CASCADE)
@@ -68,6 +80,7 @@ class Reserva(models.Model):
     fecha_fin = models.DateField()
     creado = models.DateTimeField(auto_now_add=True)
     total = models.IntegerField(null=True, blank=True)  # Nuevo campo
+    estado_pago = models.CharField(max_length=10, choices=ESTADOS_PAGO, default='PENDIENTE')
 
     def dias_reserva(self):
         return (self.fecha_fin - self.fecha_inicio).days + 1  # incluye ambos días
@@ -77,3 +90,32 @@ class Reserva(models.Model):
 
     def __str__(self):
         return f"Reserva de {self.motocicleta} por {self.nombre_cliente}"
+    
+
+
+class Pago(models.Model):
+    ESTADOS = [
+        ('PENDIENTE', 'Pendiente'),
+        ('PAGADO', 'Pagado'),
+    ]
+    reserva = models.OneToOneField(Reserva, on_delete=models.CASCADE, related_name='pago')
+    estado = models.CharField(max_length=10, choices=ESTADOS, default='PENDIENTE')
+    fecha_pago = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Pago de {self.reserva} - {self.estado}"
+
+class AlteracionUsuario(models.Model):
+    TIPOS = [
+        ('modificacion', 'Modificación'),
+        ('eliminacion',  'Eliminación'),
+    ]
+    usuario = models.ForeignKey(UsuarioRegistro, on_delete=models.CASCADE)
+    tipo = models.CharField(max_length=20, choices=TIPOS)
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.usuario} - {self.get_tipo_display()} - {self.fecha}"
+    
+
+

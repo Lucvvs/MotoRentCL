@@ -13,5 +13,7 @@ urlpatterns = [
     path('logout/', views.logout_usuario, name='logout'),
     path('reserva/<int:moto_id>/', views.reserva_moto, name='reserva'),
     path('api/', include('MotoRentCL.api_urls')),
+    path('mi_perfil/', views.mi_perfil, name='mi_perfil'),
+    path('eliminar_usuario/', views.eliminar_usuario, name='eliminar_usuario'),
     
 ]

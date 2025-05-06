@@ -1,14 +1,14 @@
 import concurrent
 from django.shortcuts import render, redirect, get_object_or_404
 import requests
-from .models import Motocicleta, UsuarioRegistro, Reserva
+from .models import Motocicleta, UsuarioRegistro, Reserva, AlteracionUsuario, TipoUsuario
 from django.utils.text import slugify
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
-from .forms import ContactoForm, ReservaForm
+from .forms import ContactoForm, ReservaForm, UsuarioForm
 from datetime import timedelta
 
 API_KEY = '96DbFvqidfnd56ps1VdwpA==KGJebGeaPxidodno'
@@ -247,6 +247,8 @@ def registro_usuario(request):
         if UsuarioRegistro.objects.filter(correo=correo).exists():
             messages.error(request, "Este correo ya está registrado.")
             return redirect('registro')
+        
+        tipo_default = TipoUsuario.objects.get(codigo=0)
 
 
         nuevo_usuario = UsuarioRegistro(
@@ -254,7 +256,8 @@ def registro_usuario(request):
             correo=correo,
             telefono=telefono,
             nacionalidad=nacionalidad,
-            contrasena=contrasena
+            contrasena=contrasena,
+            tipo_usuario=tipo_default
         )
         nuevo_usuario.save()
 
@@ -310,20 +313,31 @@ def logout_usuario(request):
 
 
 
-
 def contacto_usuario(request):
     if request.method == 'POST':
         form = ContactoForm(request.POST)
         if form.is_valid():
             contacto = form.save()
             messages.success(request,
-                f"Gracias por tu mensaje, {contacto.nombre}. Te contactaremos al correo y/o teléfono ingresado dentro de las proximas 48 horas!"
+                f"Gracias por tu mensaje, {contacto.nombre}. Te contactaremos al correo y/o teléfono ingresado dentro de las próximas 48 horas!"
             )
             return redirect('index')
     else:
-        form = ContactoForm()
-    return render(request, 'contacto.html', {'form': form})
+        # Cargar datos del usuario si hay sesión
+        inicial = {}
+        if request.session.get('usuario_id'):
+            try:
+                from .models import UsuarioRegistro
+                usuario = UsuarioRegistro.objects.get(id=request.session['usuario_id'])
+                inicial['nombre'] = usuario.nombre
+                inicial['correo'] = usuario.correo
+                inicial['celular'] = usuario.telefono  # ✅ Aquí va el celular
+            except UsuarioRegistro.DoesNotExist:
+                pass
 
+        form = ContactoForm(initial=inicial)
+
+    return render(request, 'contacto.html', {'form': form})
 
 
 def reserva_moto(request, moto_id):
@@ -350,15 +364,17 @@ def reserva_moto(request, moto_id):
             reserva.nombre_cliente = request.session.get('usuario_nombre', '')
             reserva.correo         = request.session.get('usuario_correo', '')
             reserva.total          = reserva.total_pagar()
-            reserva.save()
 
-            # ¿Qué acción pidió el usuario?
+            # Detectar botón presionado
             accion = request.POST.get('accion')
             if accion == 'reservar':
+                reserva.estado_pago = 'PENDIENTE'
                 messages.success(request, '🔥 Reserva realizada con éxito. ¡Gracias por preferir MotoRentCL! 🏍️')
             elif accion == 'pagar':
+                reserva.estado_pago = 'PAGADO'
                 messages.success(request, '💳 Pago realizado con éxito. Revisa tu correo para más detalles. ¡Gracias! 🔥🏍️💨')
 
+            reserva.save()
             return redirect('index')
 
     else:
@@ -372,3 +388,51 @@ def reserva_moto(request, moto_id):
         'moto': moto,
         'form': form
     })
+def mi_perfil(request):
+    if not request.session.get('usuario_id'):
+        return redirect('login')
+
+    usuario = UsuarioRegistro.objects.get(id=request.session['usuario_id'])
+
+    if request.method == 'POST':
+        form = UsuarioForm(request.POST, instance=usuario)
+        if form.is_valid():
+            usuario_modificado = form.save(commit=False)
+
+            nueva_contrasena = form.cleaned_data.get('contrasena')
+            if nueva_contrasena:
+                usuario_modificado.contrasena = make_password(nueva_contrasena)
+
+            usuario_modificado.save()
+            request.session['usuario_nombre'] = usuario_modificado.nombre
+            request.session['usuario_correo'] = usuario_modificado.correo
+
+            AlteracionUsuario.objects.create(usuario=usuario_modificado, tipo='modificacion')
+
+            messages.success(request, "¡Datos actualizados correctamente!")
+            return redirect('index')
+    else:
+        form = UsuarioForm(instance=usuario)
+
+    return render(request, 'mi_perfil.html', {'form': form})
+
+
+
+
+def eliminar_usuario(request):
+    if not request.session.get('usuario_id'):
+        return redirect('login')
+
+    try:
+        usuario = UsuarioRegistro.objects.get(id=request.session['usuario_id'])
+    except UsuarioRegistro.DoesNotExist:
+        return redirect('login')
+
+    # Registrar la eliminación
+    AlteracionUsuario.objects.create(usuario=usuario, tipo='eliminacion')
+
+    # Eliminar usuario y cerrar sesión
+    usuario.delete()
+    request.session.flush()
+
+    return redirect('index')
