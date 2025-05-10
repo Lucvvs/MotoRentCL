@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: db_motorentcl
+    name: db_motorentcl-web
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn MotoRentCL.wsgi 
