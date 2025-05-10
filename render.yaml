@@ -3,7 +3,7 @@ services:
     name: db_motorentcl
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn MotoRentCl 
+    startCommand: gunicorn MotoRentCL 
     envVars:
       - key: DATABASE_URL
         fromDatabase:
