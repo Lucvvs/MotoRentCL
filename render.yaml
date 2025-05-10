@@ -10,4 +10,4 @@ services:
           name: db_motorentcl
 
 databases:
-  - name: db_motorrentcl 
+  - name: db_motorentcl 
