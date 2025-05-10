@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
-  <!-- Navbar igual al de tus otras páginas -->
+  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg fixed-top arreglo-navbar">
     <div class="container-fluid">
       <a class="navbar-brand d-flex align-items-center logo-text m-0" href="{% url 'index' %}">
@@ -41,7 +41,7 @@
       <div class="col-12 col-md-8 col-lg-6">
         <h2 class="eslogan mb-4 text-center">Contáctanos</h2>
 
-        <!-- Mostrar errores de validación -->
+        <!-- Mostrar errore -->
         {% if form.errors %}
           <div class="alert alert-danger">
             Por favor corrige los errores en el formulario.

@@ -154,7 +154,7 @@ h2 {
     max-width: 900px;
 }
 
-/* Sombra animada con cambio de tono */
+/* Sombra */
 @keyframes glowFade {
     0% {
         text-shadow: 0 0 4px rgb(4, 243, 231);
@@ -174,7 +174,7 @@ h2 {
 
 
 .lista-destacada {
-    list-style: none; /* Oculta bullets */
+    list-style: none; 
     font-size: 1.05rem;
     padding-left: 0;
     font-weight: 600;
@@ -187,7 +187,7 @@ h2 {
   
   .lista-destacada li {
     position: relative;
-    padding-left: 40px; /* espacio para el icono */
+    padding-left: 40px; 
   }
   
   .lista-destacada li::before {
@@ -214,16 +214,14 @@ h2 {
 /* SPLASH DE MOTO *//* SPLASH DE MOTO *//* SPLASH DE MOTO */
 /* SPLASH DE MOTO *//* SPLASH DE MOTO *//* SPLASH DE MOTO */
 
-/* Pantalla completa al cargar */
-/* Pantalla completa y centrada */
 #moto-screen {
     position: absolute;
     top: 0%;
-    left: -300px; /* empieza fuera de la sección */
+    left: -300px; 
     width: 100%;
     height: 0;
-    z-index: 2; /* detrás del h1 */
-    pointer-events: none; /* no bloquea clics */
+    z-index: 2; 
+    pointer-events: none; 
 }
 
 .moto-entrada {
@@ -237,11 +235,11 @@ h2 {
         opacity: 1;
     }
     99% {
-        transform: translateX(400%); /* sale justo por el borde derecho */
+        transform: translateX(400%); 
         opacity: 1;
     }
     100% {
-        transform: translateX(405%); /* sale justo por el borde derecho */
+        transform: translateX(405%);
         opacity: 0;
     }
 }
@@ -253,7 +251,7 @@ h2 {
 .moto-entrada2 {
     width: 650px;
     animation: cruzarPantallaReversa 2.5s ease-in-out forwards;
-    transform: scaleX(-1); /* Espeja la imagen horizontalmente */
+    transform: scaleX(-1); 
 }
 
 @keyframes cruzarPantallaReversa {
@@ -278,7 +276,7 @@ h2 {
 
 
 .logo-calidad {
-    color: #000000;                 /* texto negro */
+    color: #000000;                
     font-weight: bold;
     display: inline-block;
     text-align: center;
@@ -297,7 +295,7 @@ h2 {
 
 
 .logo-calidad2 {
-    color: #000000;                 /* texto negro */
+    color: #000000;                 
     font-weight: bold;
     display: inline-block;
     text-align: center;
@@ -318,21 +316,21 @@ h2 {
 
 .img-calidad {
     display: block;
-    margin: 0 auto; /* centra horizontalmente */
-    border: 2px solid #000000; /* borde negro */
-    border-radius: 6px; /* opcional, bordes levemente redondeados */
+    margin: 0 auto; 
+    border: 2px solid #000000; 
+    border-radius: 6px; 
     animation: latido 1.8s ease-in-out infinite;
     max-width: 120px;
     margin-top: 10px;
 }
 
-/* Animación tipo "latido" */
+/* Animación latido" *//* Animación latido" */
 @keyframes latido {
     0%, 100% {
         transform: scale(1);
     }
     50% {
-        transform: scale(1.06); /* agranda un poco en el centro */
+        transform: scale(1.06); 
     }
 }
 
@@ -360,7 +358,7 @@ h2 {
   .scroll-marcas-track img {
     height: 60px;
     transition: transform 0.3s ease-in-out;
-    max-height: 60px;   /* Altura máxima */
+    max-height: 60px;  
     max-width: 120px; 
   }
   
@@ -449,7 +447,7 @@ h2 {
   }
   
   .fondo-descripcion {
-    background: rgba(0, 0, 0, 0.5); /* fondo negro semitransparente */
+    background: rgba(0, 0, 0, 0.5); 
     border-top: 1px solid rgba(255,255,255,0.2);
     border-radius: 0 0 10px 10px;
   }
@@ -500,8 +498,8 @@ h2 {
   }
   
   .full-img2 {
-    width: 100%; /* 5px de margen a cada lado */
-    height: 100%;            /* puedes ajustar este valor a tu gusto */
+    width: 100%; 
+    height: 100%;           
     margin-top: 50px;
     object-fit: contain;
     object-position: center;
@@ -514,7 +512,7 @@ h2 {
     left: 0;
     width: 100%;
     height: 70px; /* Ajusta a gusto */
-    background-color: rgba(0, 149, 175, 0.596); /* Celeste con transparencia */
+    background-color: rgba(0, 149, 175, 0.596); 
 
   }
 
@@ -526,14 +524,14 @@ h2 {
     color: #000;
     border-radius: 12px;
     border: 2px solid #09ffff;
-    overflow: hidden; /* evita que el header o body sobresalgan */
+    overflow: hidden; 
   }
   
   .custom-header {
     background-color: #01c0da44;
     color: #000;
     border-bottom: 3px solid #000000;
-    border-radius: 0; /* evita que sobresalga del modal */
+    border-radius: 0;
     padding: 1rem 1.25rem;
   }
   
@@ -543,7 +541,7 @@ h2 {
   
   .custom-body {
     background-color: #ffffff;
-    border-radius: 0; /* evita sobresalir */
+    border-radius: 0;
     padding: 1.5rem;
   }
  
@@ -615,7 +613,7 @@ h2 {
   left: 10px;
   cursor: grab;
   border-radius: 50%;
-  background-color: rgba(0, 255, 242, 0.05); /* invisible pero útil */
+  background-color: rgba(0, 255, 242, 0.05); 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -649,11 +647,11 @@ h2 {
 
 @keyframes pulso-completo {
   0% {
-    background-color: rgba(0, 195, 255, 0.438);    /* celeste suave */
+    background-color: rgba(0, 195, 255, 0.438);  
     box-shadow: 0 0 6px rgba(0, 195, 255, 0.349);
   }
   100% {
-    background-color: rgba(77, 77, 77, 0.527);   /* celeste más fuerte */
+    background-color: rgba(77, 77, 77, 0.527);   
     box-shadow: 0 0 12px rgba(77, 77, 77, 0.527);
   }
 }
@@ -661,7 +659,7 @@ h2 {
 .form-label {
   font-size: 1.05rem;
   font-weight: bold;
-  color: #003049; /* o el color principal de tu marca */
+  color: #003049; 
   margin-bottom: 5px;
 }
 
@@ -678,35 +676,35 @@ h2 {
 .item-detalle {
   margin-bottom: 10px;
   padding: 6px 10px;
-  background-color: #f8f9fa; /* fondo gris claro */
-  border-left: 4px solid #04817b; /* línea azul Bootstrap */
+  background-color: #f8f9fa; 
+  border-left: 4px solid #04817b; 
   border-radius: 4px;
   font-size: 15px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 .item-detalle strong {
-  color: #005153; /* azul Bootstrap */
+  color: #005153; 
 }
 
 
 .btn-nombre-usuario {
-  background-color: #07fff3; /* color tipo btn-warning */
+  background-color: #07fff3; 
   color: #000;
   border: none;
   transition: background-color 0.3s ease;
 }
 
 .btn-nombre-usuario:hover {
-  background-color: #e0a800; /* un tono más oscuro al pasar el mouse */
+  background-color: #e0a800; 
   color: rgb(0, 0, 0);
 }
 
 
 .img-motoalq {
-  width: 100%;                 /* Ajusta a contenedor, puedes usar 70% si quieres más pequeño */
-  max-width: 500px;            /* Máximo tamaño para que no se pase */
-  height: auto;                /* Mantiene proporciones */
-  border-radius: 20px;         /* Bordes redondeados */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8); /* Sombra intensa */
+  width: 100%;               
+  max-width: 500px;           
+  height: auto;               
+  border-radius: 20px;         
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8); 
   display: block;
 }

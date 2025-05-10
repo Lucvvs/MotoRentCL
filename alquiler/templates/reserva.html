@@ -66,7 +66,7 @@
     </div>
   </div>
   
-  <!-- Formulario de reserva centrado -->
+  <!-- Formulario de reserva -->
   <div class="container my-5">
     <div class="row justify-content-center">
       <div class="col-md-10 col-lg-10">
@@ -74,14 +74,14 @@
           {% csrf_token %}
           <h4 class="text-center mb-4">Reserva tu motocicleta</h4>
   
-          <!-- Nombre autocompletado -->
+          <!-- Nombre  -->
           <div class="mb-3">
             <label for="nombre_cliente" class="form-label">Nombre completo</label>
             <input type="text" class="form-control" id="nombre_cliente" name="nombre_cliente"
                    value="{{ request.session.usuario_nombre }}" readonly>
           </div>
   
-          <!-- Correo autocompletado -->
+          <!-- Correo  -->
           <div class="mb-3">
             <label for="correo" class="form-label">Correo electrónico</label>
             <input type="email" class="form-control" id="correo" name="correo"
@@ -162,7 +162,7 @@
       fechaInicio.addEventListener('change', calcularTotal);
       fechaFin.addEventListener('change', calcularTotal);
   
-      // ✅ Ocultar resumen al resetear el formulario
+      // oculta resumen
       form.addEventListener('reset', function () {
         resumen.style.display = 'none';
         diasSpan.textContent = '';

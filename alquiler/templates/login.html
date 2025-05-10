@@ -21,7 +21,7 @@
         <span class="rent">Rent</span>
         <span class="cl-c">C</span><span class="cl-l">L</span>
       </a>
-    <!-- Botones a la derecha -->
+    <!-- Botoness -->
     <div class="ms-auto d-flex gap-3 align-items-center">
       <a href="{% url 'arrendar' %}" class="nav-link boton-arrendar">🏍️Alquilar🏍️</a>
     
@@ -49,7 +49,7 @@
       <div class="col-12 col-md-8 col-lg-6">
         <h2 class="eslogan mb-4 text-center">Bienvenido de vuelta a MotoRentCL</h2>
 
-        <!-- 1) Mostrar mensajes de error/éxito -->
+        <!-- Mostrarerror/éxito -->
         {% if messages %}
   {% for message in messages %}
     <div class="alert alert-{{ message.tags }}">{{ message }}</div>
