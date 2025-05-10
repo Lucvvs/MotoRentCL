@@ -1,5 +1,6 @@
 
-
+import dj_database_url
+import os
 from pathlib import Path
 from django.contrib.messages import constants as messages_constants
 
@@ -14,7 +15,7 @@ MESSAGE_TAGS = {
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_cocmt)idigs)=ak(zo)o_=up$h6stv7&48q^e-sd-6wqpe(%)'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'clave-insegura-para-desarrollo')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -72,12 +73,7 @@ WSGI_APPLICATION = 'MotoRentCL.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.oracle',
-        'NAME': 'localhost:1521/XE',
-        'USER': 'MotoRentCL',
-        'PASSWORD': 'duoc',
-    }
+    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
 
 
