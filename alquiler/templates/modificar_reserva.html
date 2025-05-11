@@ -97,7 +97,7 @@
       const inicio = new Date(fechaInicio.value);
       const fin = new Date(fechaFin.value);
       if (!isNaN(inicio) && !isNaN(fin) && fin > inicio) {
-        const dias = Math.ceil((fin - inicio) / (1000 * 60 * 60 * 24));
+        const dias = Math.floor((fin - inicio) / (1000 * 60 * 60 * 24)) + 1;
         diasSpan.textContent = dias;
         totalSpan.textContent = dias * precioPorDia;
         resumen.style.display = 'block';
