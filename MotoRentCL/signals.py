@@ -7,3 +7,5 @@ def crear_tipos_usuario(sender, **kwargs):
     if sender.name == 'alquiler':
         TipoUsuario.objects.get_or_create(codigo=0, descripcion='Usuario')
         TipoUsuario.objects.get_or_create(codigo=1, descripcion='Administrador')
+
+
