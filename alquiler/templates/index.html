@@ -34,7 +34,7 @@
     
       {% if request.session.usuario_nombre %}
       <a href="{% url 'mi_perfil' %}" class="btn btn-nombre-usuario fw-bold">
-        {{ request.session.usuario_nombre }}
+        {{ request.session.usuario_nombre|cut:" "|slice:":1" }}
       </a>
         <form action="{% url 'logout' %}" method="POST" class="d-inline">
           {% csrf_token %}
