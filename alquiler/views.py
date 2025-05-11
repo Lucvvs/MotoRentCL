@@ -471,7 +471,13 @@ def modificar_reserva(request, pk):
     else:
         form = ReservaFormEditar(instance=reserva)
 
-    return render(request, 'modificar_reserva.html', {'form': form, 'reserva': reserva})
+    precio = reserva.motocicleta.precio if reserva.motocicleta and reserva.motocicleta.precio else 0
+
+    return render(request, 'modificar_reserva.html', {
+        'form': form,
+        'reserva': reserva,
+        'precio_dia': int(precio)
+    })
 
 @require_POST
 def eliminar_reserva(request, pk):
