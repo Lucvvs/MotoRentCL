@@ -596,12 +596,12 @@ h2 {
   /* Estilos generales */
 .detalles-moto,
 .formulario-reserva {
-  max-width: 700px;
+  width: 100%;
+  max-width: 100%; /* antes 700px */
+  padding-left: 1rem;
+  padding-right: 1rem;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 15px;
-  padding-right: 15px;
-  text-align: left;
 }
 
 /* Ajustes móviles */
@@ -635,12 +635,6 @@ h2 {
     align-items: stretch;
   }
 
-  .detalles-moto,
-  .formulario-reserva {
-    max-width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
 }
 
   /* IMG porfavor iniciar sesion */  /* IMG porfavor iniciar sesion */
@@ -807,7 +801,7 @@ h2 {
 
 .img-motoalq {
   width: 100%;
-  max-width: 500px;
+  max-width: 100%; /* antes 500px */
   height: auto;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
