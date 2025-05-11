@@ -215,18 +215,24 @@ h2 {
 /* SPLASH DE MOTO *//* SPLASH DE MOTO *//* SPLASH DE MOTO */
 
 #moto-screen {
-    position: absolute;
-    top: 0%;
-    left: -300px; 
-    width: 100%;
-    height: 0;
-    z-index: 2; 
-    pointer-events: none; 
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+  height: 25vw;
+  max-height: 180px;
+  min-height: 100px;
 }
 
 .moto-entrada {
-    width: 650px;
-    animation: cruzarPantalla 2.5s ease-in-out forwards;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60vw;
+  max-width: 650px;
+  height: auto;
+  transform: translateX(-100%);
+  animation: cruzarPantalla 2.5s ease-in-out forwards;
+  z-index: 10;
 }
 
 @keyframes cruzarPantalla {
