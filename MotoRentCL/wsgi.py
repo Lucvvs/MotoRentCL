@@ -1,16 +1,21 @@
-"""
-WSGI config for MotoRentCL project.
-
-It exposes the WSGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/5.2/howto/deployment/wsgi/
-"""
-
 import os
-
 from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'MotoRentCL.settings')
+
+# 🚀 Fuerza migraciones en Render
+import django
+django.setup()
+
+from django.core.management import call_command
+import traceback
+
+try:
+    print("🔥 Ejecutando migraciones desde wsgi.py...")
+    call_command('migrate', interactive=False)
+    print("✅ Migraciones completadas correctamente.")
+except Exception as e:
+    print("❌ Error ejecutando migraciones:")
+    traceback.print_exc()
 
 application = get_wsgi_application()
