@@ -44,27 +44,32 @@
 
 <!-- Detalles de la moto -->
 <div class="container espaciado-sup">
-    <div class="row">
-      <div class="col-md-6 text-center">
-        <img src="{% static 'img/motos/' %}{{ moto.model|slugify }}.png" class="img-motoalq" alt="{{ moto.model }}">
-      </div>
-      <div class="col-md-6">
-        <h2>{{ moto.make }} {{ moto.model }}</h2>
-        <ul class="list-unstyled mt-3">
-          <li class="item-detalle"><strong>Año:</strong> {{ moto.year }}</li>
-          <li class="item-detalle"><strong>Potencia:</strong> {{ moto.power|default:"No especificada" }}</li>
-          <li class="item-detalle"><strong>Transmisión:</strong> {{ moto.gearbox|default:"-" }}</li>
-          <li class="item-detalle"><strong>Refrigeración:</strong> {{ moto.cooling|default:"-" }}</li>
-          <li class="item-detalle"><strong>Tipo:</strong> {{ moto.tipo|default:"-" }}</li>
-          <li class="item-detalle"><strong>Precio por día:</strong> ${{ moto.precio|floatformat:0 }} CLP</li>
-        </ul>
-  
-        <div class="d-flex gap-3 mt-4">
-          <a href="{% url 'arrendar' %}" class="btn btn-outline-secondary">Cambiar modelo</a>
-        </div>
+  <div class="row align-items-center">
+    
+    <!-- Imagen de la moto -->
+    <div class="col-12 col-md-6 text-center mb-4 mb-md-0">
+      <img src="{% static 'img/motos/' %}{{ moto.model|slugify }}.png" class="img-fluid img-motoalq" alt="{{ moto.model }}">
+    </div>
+
+    <!-- Detalles de la moto -->
+    <div class="col-12 col-md-6">
+      <h2 class="text-center text-md-start">{{ moto.make }} {{ moto.model }}</h2>
+      <ul class="list-unstyled mt-3">
+        <li class="item-detalle"><strong>Año:</strong> {{ moto.year }}</li>
+        <li class="item-detalle"><strong>Potencia:</strong> {{ moto.power|default:"No especificada" }}</li>
+        <li class="item-detalle"><strong>Transmisión:</strong> {{ moto.gearbox|default:"-" }}</li>
+        <li class="item-detalle"><strong>Refrigeración:</strong> {{ moto.cooling|default:"-" }}</li>
+        <li class="item-detalle"><strong>Tipo:</strong> {{ moto.tipo|default:"-" }}</li>
+        <li class="item-detalle"><strong>Precio por día:</strong> ${{ moto.precio|floatformat:0 }} CLP</li>
+      </ul>
+
+      <div class="d-flex justify-content-center justify-content-md-start gap-3 mt-4">
+        <a href="{% url 'arrendar' %}" class="btn btn-outline-secondary">Cambiar modelo</a>
       </div>
     </div>
+
   </div>
+</div>
   
   <!-- Formulario de reserva -->
   <div class="container my-5">
