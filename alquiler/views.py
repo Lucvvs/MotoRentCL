@@ -43,7 +43,7 @@ modelos_deseados = [
     {'make': 'bmw', 'model': 'f 850 gs adventure'},
     {'make': 'bmw', 'model': 'g 310 r'},
     {'make': 'bmw', 'model': 'r 1250 r'},
-    {'make': 'bmw', 'model': 'r 400 gt'},
+    {'make': 'bmw', 'model': 'c 400 gt'},
     {'make': 'Husqvarna', 'model': '701 supermoto'},
     {'make': 'Husqvarna', 'model': 'svartpilen 125'},
     {'make': 'Husqvarna', 'model': 'fc 250'},
