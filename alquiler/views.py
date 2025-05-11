@@ -414,7 +414,13 @@ def mi_perfil(request):
     else:
         form = UsuarioForm(instance=usuario)
 
-    return render(request, 'mi_perfil.html', {'form': form})
+    # 👇 Consulta las reservas del usuario por correo
+    reservas = Reserva.objects.filter(correo=usuario.correo)
+
+    return render(request, 'mi_perfil.html', {
+        'form': form,
+        'reservas': reservas
+    })
 
 
 

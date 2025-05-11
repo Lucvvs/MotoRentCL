@@ -4,6 +4,7 @@ body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    
 
 }
 
@@ -87,6 +88,29 @@ h2 {
     font-weight: 500;
     transition: background-color 0.2s ease, color 0.2s ease;
     border: 1px solid #ffffff;
+    white-space: nowrap;
+}
+
+@media (max-width: 576px) {
+  .boton-arrendar {
+    padding: 4px 12px;
+  }
+
+  .logo-text span {
+    font-size: 1.2rem;
+  }
+
+  .logo-moto {
+    width: 45px;
+    height: auto;
+  }
+  .logo-text {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+  }
+
 }
 
 .boton-arrendar:hover {
@@ -136,6 +160,12 @@ h2 {
     position: relative;
     z-index: 1;
   }
+
+  @media (max-width: 576px) {
+  .eslogan {
+    margin-top: 60px !important;
+  }
+}
   
 
 
@@ -214,7 +244,14 @@ h2 {
 /* SPLASH DE MOTO *//* SPLASH DE MOTO *//* SPLASH DE MOTO */
 /* SPLASH DE MOTO *//* SPLASH DE MOTO *//* SPLASH DE MOTO */
 
-#moto-screen {
+/* Ocultar por defecto */
+.moto-entrada {
+  display: none;
+}
+
+/* Solo aplicar en pantallas grandes (≥992px) */
+@media (min-width: 992px) {
+  #moto-screen {
     position: absolute;
     top: 0%;
     left: -300px; 
@@ -222,26 +259,28 @@ h2 {
     height: 0;
     z-index: 2; 
     pointer-events: none; 
-}
+  }
 
-.moto-entrada {
+  .moto-entrada {
     width: 650px;
     animation: cruzarPantalla 2.5s ease-in-out forwards;
-}
+    display: block;
+  }
 
-@keyframes cruzarPantalla {
+  @keyframes cruzarPantalla {
     0% {
-        transform: translateX(-100%);
-        opacity: 1;
+      transform: translateX(-100%);
+      opacity: 1;
     }
     99% {
-        transform: translateX(400%); 
-        opacity: 1;
+      transform: translateX(400%); 
+      opacity: 1;
     }
     100% {
-        transform: translateX(405%);
-        opacity: 0;
+      transform: translateX(405%);
+      opacity: 0;
     }
+  }
 }
 
 /* moto entrada invertida *//* moto entrada invertida *//* moto entrada invertida */
@@ -249,24 +288,32 @@ h2 {
 
 
 .moto-entrada2 {
+  display: none;
+}
+
+/* Aplica solo en pantallas grandes */
+@media (min-width: 992px) {
+  .moto-entrada2 {
     width: 650px;
     animation: cruzarPantallaReversa 2.5s ease-in-out forwards;
     transform: scaleX(-1); 
-}
+    display: block;
+  }
 
-@keyframes cruzarPantallaReversa {
+  @keyframes cruzarPantallaReversa {
     0% {
-        transform: translateX(200%);
-        opacity: 1;
+      transform: translateX(200%);
+      opacity: 1;
     }
     99% {
-        transform: translateX(-400%);
-        opacity: 1;
+      transform: translateX(-400%);
+      opacity: 1;
     }
     100% {
-        transform: translateX(-405%);
-        opacity: 0;
+      transform: translateX(-405%);
+      opacity: 0;
     }
+  }
 }
 
 

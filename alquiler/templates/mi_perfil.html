@@ -38,6 +38,37 @@
 
 <div class="container my-5">
   <div class="row justify-content-center">
+      <hr class="my-5">
+<h3 class="text-center mb-4">Mis Reservas</h3>
+
+{% if reservas %}
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>Moto</th>
+          <th>Inicio</th>
+          <th>Fin</th>
+          <th>Total</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for reserva in reservas %}
+          <tr>
+            <td>{{ reserva.motocicleta }}</td>
+            <td>{{ reserva.fecha_inicio }}</td>
+            <td>{{ reserva.fecha_fin }}</td>
+            <td>${{ reserva.total }}</td>
+            <td>{{ reserva.estado_pago }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p class="text-center text-muted">No tienes reservas registradas aún.</p>
+{% endif %}
     <div class="col-md-8">
       <h2 class="text-center mb-4">Mi Perfil</h2>
 
