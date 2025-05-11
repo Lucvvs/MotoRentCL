@@ -38,7 +38,7 @@
       </a>
         <form action="{% url 'logout' %}" method="POST" class="d-inline">
           {% csrf_token %}
-          <button type="submit" class="btn btn-light text-dark">Cerrar sesión</button>
+          <button type="submit" class="btn btn-light text-dark">Salir❌</button>
         </form>
       {% else %}
         <a href="{% url 'registro' %}" class="btn btn-outline-light">Registro</a>
