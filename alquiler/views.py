@@ -220,7 +220,7 @@ def registro_usuario(request):
     if request.method == 'POST':
         # reCAPTCHA
         token = request.POST.get('g-recaptcha-response')
-        secret_key = '6LeTmS4rAAAAAC3HrSS6Rb9MtVrdyoM9hh0DTx2c'
+        secret_key = '6LdklC4rAAAAAKGtBkeNXxObeWSDnIyXDdzjS1z3'
 
         respuesta = requests.post(
             'https://www.google.com/recaptcha/api/siteverify',
