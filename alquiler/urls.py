@@ -15,5 +15,7 @@ urlpatterns = [
     path('api/', include('MotoRentCL.api_urls')),
     path('mi_perfil/', views.mi_perfil, name='mi_perfil'),
     path('eliminar_usuario/', views.eliminar_usuario, name='eliminar_usuario'),
+    path('reserva/<int:pk>/editar/', views.modificar_reserva, name='modificar_reserva'),
+    path('reserva/<int:pk>/eliminar/', views.eliminar_reserva, name='eliminar_reserva'),
     
 ]

@@ -51,6 +51,7 @@
           <th>Fin</th>
           <th>Total</th>
           <th>Estado</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -61,6 +62,17 @@
             <td>{{ reserva.fecha_fin }}</td>
             <td>${{ reserva.total }}</td>
             <td>{{ reserva.estado_pago }}</td>
+            <td>
+              {% if reserva.estado_pago == "PENDIENTE" %}
+                <a href="{% url 'modificar_reserva' reserva.id %}" class="btn btn-sm btn-warning">Editar</a>
+                <form action="{% url 'eliminar_reserva' reserva.id %}" method="POST" class="d-inline">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que deseas eliminar esta reserva?')">Eliminar</button>
+                </form>
+              {% else %}
+                <span class="text-muted">Pagada</span>
+              {% endif %}
+            </td>
           </tr>
         {% endfor %}
       </tbody>

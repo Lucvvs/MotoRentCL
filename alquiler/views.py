@@ -8,8 +8,10 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
-from .forms import ContactoForm, ReservaForm, UsuarioForm
+from .forms import ContactoForm, ReservaForm, UsuarioForm, ReservaFormEditar
 from datetime import timedelta
+from django.views.decorators.http import require_POST
+
 
 API_KEY = '96DbFvqidfnd56ps1VdwpA==KGJebGeaPxidodno'
 
@@ -442,3 +444,50 @@ def eliminar_usuario(request):
     request.session.flush()
 
     return redirect('index')
+
+
+def modificar_reserva(request, pk):
+    if not request.session.get('usuario_correo'):
+        return redirect('login')
+
+    reserva = get_object_or_404(Reserva, pk=pk)
+
+    if reserva.correo != request.session['usuario_correo']:
+        messages.error(request, "No tienes permiso para modificar esta reserva.")
+        return redirect('mi_perfil')
+
+    if reserva.estado_pago != 'PENDIENTE':
+        messages.error(request, "No se puede editar una reserva pagada.")
+        return redirect('mi_perfil')
+
+    if request.method == 'POST':
+        form = ReservaFormEditar(request.POST, instance=reserva)
+        if form.is_valid():
+            reserva = form.save(commit=False)
+            reserva.total = reserva.total_pagar()
+            reserva.save()
+            messages.success(request, "Reserva actualizada correctamente.")
+            return redirect('mi_perfil')
+    else:
+        form = ReservaFormEditar(instance=reserva)
+
+    return render(request, 'modificar_reserva.html', {'form': form, 'reserva': reserva})
+
+@require_POST
+def eliminar_reserva(request, pk):
+    if not request.session.get('usuario_correo'):
+        return redirect('login')
+
+    reserva = get_object_or_404(Reserva, pk=pk)
+
+    if reserva.correo != request.session['usuario_correo']:
+        messages.error(request, "No tienes permiso para eliminar esta reserva.")
+        return redirect('mi_perfil')
+
+    if reserva.estado_pago != 'PENDIENTE':
+        messages.error(request, "No se puede eliminar una reserva pagada.")
+    else:
+        reserva.delete()
+        messages.success(request, "Reserva eliminada correctamente.")
+
+    return redirect('mi_perfil')
