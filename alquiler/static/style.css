@@ -591,6 +591,41 @@ h2 {
     border-radius: 0;
     padding: 1.5rem;
   }
+
+
+  @media (max-width: 576px) {
+  .contenedor-reserva {
+    padding: 0 15px;
+    max-width: 100%;
+  }
+
+  .contenedor-reserva h2,
+  .contenedor-reserva ul,
+  .contenedor-reserva form,
+  .contenedor-reserva label,
+  .contenedor-reserva .form-control,
+  .contenedor-reserva .btn {
+    text-align: left !important;
+  }
+
+  .contenedor-reserva .form-control {
+    font-size: 0.95rem;
+  }
+
+  .contenedor-reserva .item-detalle {
+    font-size: 0.95rem;
+  }
+
+  .contenedor-reserva .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .contenedor-reserva .d-flex.justify-content-between {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
  
 
   /* IMG porfavor iniciar sesion */  /* IMG porfavor iniciar sesion */
