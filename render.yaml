@@ -3,11 +3,7 @@ services:
     name: motorentcl-web
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: >
-      python manage.py migrate &&
-      echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='admin').exists() or User.objects.create_superuser('admin', 'admin@gmail.com', 'admin')" | python manage.py shell &&
-      python manage.py collectstatic --noinput &&
-      gunicorn MotoRentCL.wsgi
+    startCommand: bash -c "echo '⛏ Ejecutando migrate...' && python manage.py migrate && echo '✅ Migraciones listas' && gunicorn MotoRentCL.wsgi"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
