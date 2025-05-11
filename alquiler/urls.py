@@ -1,7 +1,6 @@
 from django.urls import path, include
 from . import views
 from django.contrib import admin
-from .views import crear_superusuario
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -18,6 +17,5 @@ urlpatterns = [
     path('eliminar_usuario/', views.eliminar_usuario, name='eliminar_usuario'),
     path('reserva/<int:pk>/editar/', views.modificar_reserva, name='modificar_reserva'),
     path('reserva/<int:pk>/eliminar/', views.eliminar_reserva, name='eliminar_reserva'),
-    path('crear-admin/', crear_superusuario),
     
 ]
