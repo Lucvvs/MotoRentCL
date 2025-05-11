@@ -808,10 +808,12 @@ h2 {
 
 
 .img-motoalq {
-  width: 100%;               
-  max-width: 500px;           
-  height: auto;               
-  border-radius: 20px;         
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8); 
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
   display: block;
+  margin-left: auto;
+  margin-right: auto; /* ✅ esta es la clave */
 }
