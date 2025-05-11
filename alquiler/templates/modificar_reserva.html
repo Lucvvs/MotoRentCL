@@ -21,7 +21,7 @@
       <a href="{% url 'arrendar' %}" class="nav-link boton-arrendar">🏍️Alquilar🏍️</a>
       {% if request.session.usuario_nombre %}
         <a href="{% url 'mi_perfil' %}" class="btn btn-nombre-usuario fw-bold">
-          {{ request.session.usuario_nombre|cut:" "|slice:":1" }}
+          {{ request.session.usuario_nombre|primer_nombre }}
         </a>
         <form action="{% url 'logout' %}" method="POST" class="d-inline">
           {% csrf_token %}
