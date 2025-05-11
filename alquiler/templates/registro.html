@@ -154,178 +154,173 @@
   <!-- JavaScript del botón deslizable -->  <!-- JavaScript del botón deslizable -->
   <!-- JavaScript del botón deslizable -->  <!-- JavaScript del botón deslizable -->
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const form = document.getElementById('form-registro');
-      const thumb = document.getElementById('sliderThumb');
-      const track = document.querySelector('.slider-track');
-    
-      // nacinoalidades dedsde api
-      fetch('https://restcountries.com/v3.1/all')
-        .then(res => res.json())
-        .then(data => {
-          const select = document.getElementById('nacionalidad');
-          const paises = data.map(p => p.name.common).sort();
-          paises.forEach(pais => {
-            const opt = document.createElement('option');
-            opt.value = pais;
-            opt.textContent = pais;
-            select.appendChild(opt);
-          });
-        });
-    
-      //Mostrar contraseña
-      window.togglePassword = function(id) {
-        const input = document.getElementById(id);
-        input.type = input.type === 'password' ? 'text' : 'password';
-      };
-    
-      // error mensajes
-      function obtenerMensajeError(id) {
-        const mensajes = {
-          'error-nombre': 'Debe tener entre 8 y 35 caracteres, nombres y apellidos separados por espacio.',
-          'error-correo': 'Ingrese un correo electrónico válido.',
-          'error-telefono': 'El teléfono debe tener entre 8 y 12 números.',
-          'error-nacionalidad': 'Seleccione su nacionalidad o país de origen.',
-          'error-contrasena': 'La contraseña debe tener entre 8 y 20 caracteres, con al menos una letra y un número.',
-          'error-confirmar': 'Las contraseñas no coinciden.'
-        };
-        return mensajes[id];
-      }
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('form-registro');
+  const thumb = document.getElementById('sliderThumb');
+  const track = document.querySelector('.slider-track');
 
-      function validarCampo(idCampo, validacionFn) {
-        const valor = document.getElementById(idCampo).value.trim();
-        const errorElem = document.getElementById('error-' + idCampo);
-        const esValido = validacionFn(valor);
-        if (!esValido) {
-          errorElem.textContent = obtenerMensajeError('error-' + idCampo);
-          errorElem.style.display = 'block';
-        } else {
-          errorElem.style.display = 'none';
-        }
-      }
-    
-      document.getElementById('nombre').addEventListener('input', () => {
-        validarCampo('nombre', val => val.length >= 8 && val.length <= 35 && (val.match(/\s/g) || []).length >= 2 && (val.match(/\s/g) || []).length <= 3);
-      });
-    
-      document.getElementById('correo').addEventListener('input', () => {
-        validarCampo('correo', val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val));
-      });
-    
-      document.getElementById('telefono').addEventListener('input', () => {
-        validarCampo('telefono', val => /^\d{8,12}$/.test(val));
-      });
-    
-      document.getElementById('nacionalidad').addEventListener('change', () => {
-        validarCampo('nacionalidad', val => val !== '');
-      });
-    
-      document.getElementById('contrasena').addEventListener('input', () => {
-        validarCampo('contrasena', val => val.length >= 8 && val.length <= 20 && /[A-Za-z]/.test(val) && /\d/.test(val));
-      });
-    
-      document.getElementById('confirmar_contrasena').addEventListener('input', () => {
-        const confirm = document.getElementById('confirmar_contrasena').value;
-        const pass = document.getElementById('contrasena').value;
-        const errorElem = document.getElementById('error-confirmar');
-        if (confirm !== pass) {
-          errorElem.textContent = obtenerMensajeError('error-confirmar');
-          errorElem.style.display = 'block';
-        } else {
-          errorElem.style.display = 'none';
-        }
-      });
-    
-      // vaidar para deslizar
-      function validarFormulario() {
-        const nombre = document.getElementById('nombre').value.trim();
-        const correo = document.getElementById('correo').value.trim();
-        const telefono = document.getElementById('telefono').value.trim();
-        const nacionalidad = document.getElementById('nacionalidad').value;
-        const pass = document.getElementById('contrasena').value;
-        const confirm = document.getElementById('confirmar_contrasena').value;
-        const recaptcha = grecaptcha.getResponse();
-    
-        let valido = true;
-    
-        if (!(nombre.length >= 8 && nombre.length <= 35 && (nombre.match(/\s/g) || []).length >= 2 && (nombre.match(/\s/g) || []).length <= 3)) {
-          validarCampo('nombre', () => false); valido = false;
-        }
-    
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
-          validarCampo('correo', () => false); valido = false;
-        }
-    
-        if (!/^\d{8,12}$/.test(telefono)) {
-          validarCampo('telefono', () => false); valido = false;
-        }
-    
-        if (nacionalidad === '') {
-          validarCampo('nacionalidad', () => false); valido = false;
-        }
-    
-        if (!(pass.length >= 8 && pass.length <= 20 && /[A-Za-z]/.test(pass) && /\d/.test(pass))) {
-          validarCampo('contrasena', () => false); valido = false;
-        }
-    
-        if (pass !== confirm) {
-          const errorElem = document.getElementById('error-confirmar');
-          errorElem.textContent = obtenerMensajeError('error-confirmar');
-          errorElem.style.display = 'block';
-          valido = false;
-        }
-    
-        // ✅ Validación reCAPTCHA
-        if (recaptcha.length === 0) {
-         alert("Por favor completa el código reCAPTCHA.");
-         valido = false;
-        }
-
-  return valido;
-}
-    
-      // slider
-      let isDragging = false, startX = 0, currentX = 0;
-      const max = () => track.clientWidth - thumb.clientWidth;
-    
-      const setTranslateX = (x) => {
-        thumb.style.transform = `translateX(${x}px)`;
-      };
-    
-      thumb.addEventListener('pointerdown', e => {
-        isDragging = true;
-        startX = e.clientX;
-        thumb.setPointerCapture(e.pointerId);
-      });
-    
-      document.addEventListener('pointermove', e => {
-        if (!isDragging) return;
-        const dx = e.clientX - startX;
-        currentX = Math.max(0, Math.min(dx, max()));
-        setTranslateX(currentX);
-    
-        if (currentX >= max() - 10) {
-          isDragging = false;
-          setTranslateX(max());
-          if (validarFormulario()) {
-            setTimeout(() => form.submit(), 300);
-          } else {
-            setTimeout(() => setTranslateX(0), 300);
-          }
-        }
-      });
-    
-      document.addEventListener('pointerup', () => {
-        if (!isDragging) return;
-        isDragging = false;
-        if (currentX < max() - 10) {
-          setTranslateX(0);
-        }
+  // Nacionalidades desde API
+  fetch('https://restcountries.com/v3.1/all')
+    .then(res => res.json())
+    .then(data => {
+      const select = document.getElementById('nacionalidad');
+      const paises = data.map(p => p.name.common).sort();
+      paises.forEach(pais => {
+        const opt = document.createElement('option');
+        opt.value = pais;
+        opt.textContent = pais;
+        select.appendChild(opt);
       });
     });
 
+  // Mostrar contraseña
+  window.togglePassword = function (id) {
+    const input = document.getElementById(id);
+    input.type = input.type === 'password' ? 'text' : 'password';
+  };
 
-    </script>
+  function obtenerMensajeError(id) {
+    const mensajes = {
+      'error-nombre': 'Debe tener entre 8 y 35 caracteres, nombres y apellidos separados por espacio.',
+      'error-correo': 'Ingrese un correo electrónico válido.',
+      'error-telefono': 'El teléfono debe tener entre 8 y 12 números.',
+      'error-nacionalidad': 'Seleccione su nacionalidad o país de origen.',
+      'error-contrasena': 'La contraseña debe tener entre 8 y 20 caracteres, con al menos una letra y un número.',
+      'error-confirmar': 'Las contraseñas no coinciden.'
+    };
+    return mensajes[id];
+  }
+
+  function validarCampo(idCampo, validacionFn) {
+    const valor = document.getElementById(idCampo).value.trim();
+    const errorElem = document.getElementById('error-' + idCampo);
+    const esValido = validacionFn(valor);
+    if (!esValido) {
+      errorElem.textContent = obtenerMensajeError('error-' + idCampo);
+      errorElem.style.display = 'block';
+    } else {
+      errorElem.style.display = 'none';
+    }
+  }
+
+  document.getElementById('nombre').addEventListener('input', () => {
+    validarCampo('nombre', val => val.length >= 8 && val.length <= 35 && (val.match(/\s/g) || []).length >= 2 && (val.match(/\s/g) || []).length <= 3);
+  });
+
+  document.getElementById('correo').addEventListener('input', () => {
+    validarCampo('correo', val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val));
+  });
+
+  document.getElementById('telefono').addEventListener('input', () => {
+    validarCampo('telefono', val => /^\d{8,12}$/.test(val));
+  });
+
+  document.getElementById('nacionalidad').addEventListener('change', () => {
+    validarCampo('nacionalidad', val => val !== '');
+  });
+
+  document.getElementById('contrasena').addEventListener('input', () => {
+    validarCampo('contrasena', val => val.length >= 8 && val.length <= 20 && /[A-Za-z]/.test(val) && /\d/.test(val));
+  });
+
+  document.getElementById('confirmar_contrasena').addEventListener('input', () => {
+    const confirm = document.getElementById('confirmar_contrasena').value;
+    const pass = document.getElementById('contrasena').value;
+    const errorElem = document.getElementById('error-confirmar');
+    if (confirm !== pass) {
+      errorElem.textContent = obtenerMensajeError('error-confirmar');
+      errorElem.style.display = 'block';
+    } else {
+      errorElem.style.display = 'none';
+    }
+  });
+
+  function validarFormulario() {
+    const nombre = document.getElementById('nombre').value.trim();
+    const correo = document.getElementById('correo').value.trim();
+    const telefono = document.getElementById('telefono').value.trim();
+    const nacionalidad = document.getElementById('nacionalidad').value;
+    const pass = document.getElementById('contrasena').value;
+    const confirm = document.getElementById('confirmar_contrasena').value;
+    const recaptcha = grecaptcha.getResponse();
+
+    let valido = true;
+
+    if (!(nombre.length >= 8 && nombre.length <= 35 && (nombre.match(/\s/g) || []).length >= 2 && (nombre.match(/\s/g) || []).length <= 3)) {
+      validarCampo('nombre', () => false); valido = false;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+      validarCampo('correo', () => false); valido = false;
+    }
+    if (!/^\d{8,12}$/.test(telefono)) {
+      validarCampo('telefono', () => false); valido = false;
+    }
+    if (nacionalidad === '') {
+      validarCampo('nacionalidad', () => false); valido = false;
+    }
+    if (!(pass.length >= 8 && pass.length <= 20 && /[A-Za-z]/.test(pass) && /\d/.test(pass))) {
+      validarCampo('contrasena', () => false); valido = false;
+    }
+    if (pass !== confirm) {
+      const errorElem = document.getElementById('error-confirmar');
+      errorElem.textContent = obtenerMensajeError('error-confirmar');
+      errorElem.style.display = 'block';
+      valido = false;
+    }
+    if (recaptcha.length === 0) {
+      alert("Por favor completa el código reCAPTCHA.");
+      valido = false;
+    }
+
+    return valido;
+  }
+
+  // Slider funcional en PC y celular
+  let isDragging = false, startX = 0, currentX = 0;
+
+  const max = () => track.clientWidth - thumb.clientWidth;
+
+  const setTranslateX = (x) => {
+    thumb.style.transform = `translateX(${x}px)`;
+  };
+
+  const getClientX = (e) => {
+    return e.clientX ?? (e.touches?.[0]?.clientX ?? 0);
+  };
+
+  thumb.addEventListener('pointerdown', e => {
+    isDragging = true;
+    startX = getClientX(e);
+    thumb.setPointerCapture(e.pointerId);
+  });
+
+  document.addEventListener('pointermove', e => {
+    if (!isDragging) return;
+    const dx = getClientX(e) - startX;
+    currentX = Math.max(0, Math.min(dx, max()));
+    setTranslateX(currentX);
+
+    if (currentX >= max() - 10) {
+      isDragging = false;
+      setTranslateX(max());
+      if (typeof validarFormulario === 'function' && validarFormulario()) {
+        setTimeout(() => form.submit(), 300);
+      } else {
+        setTimeout(() => setTranslateX(0), 300);
+      }
+    }
+  });
+
+  document.addEventListener('pointerup', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    if (currentX < max() - 10) {
+      setTranslateX(0);
+    }
+  });
+
+});
+</script>
 
     <!-- api google captcha-->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>

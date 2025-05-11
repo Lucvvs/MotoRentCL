@@ -760,7 +760,15 @@ h2 {
   margin-bottom: 5px;
 }
 
+.slider-track {
+  user-select: none;
+  touch-action: pan-y;
+}
 
+#sliderThumb {
+  touch-action: none;
+  cursor: grab;
+}
 
 
 /* RESERVA PAGO *//* RESERVA PAGO *//* RESERVA PAGO */
