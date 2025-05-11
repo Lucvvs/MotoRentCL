@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .forms import ContactoForm, ReservaForm, UsuarioForm, ReservaFormEditar
 from datetime import timedelta
 from django.views.decorators.http import require_POST
+from django.http import HttpResponse
 
 
 API_KEY = '96DbFvqidfnd56ps1VdwpA==KGJebGeaPxidodno'
