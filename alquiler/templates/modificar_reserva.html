@@ -10,6 +10,30 @@
 </head>
 <body>
 
+<nav class="navbar navbar-expand-lg fixed-top arreglo-navbar">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center logo-text m-0" href="{% url 'index' %}">
+      <img src="{% static 'img/moto-icon.png' %}" alt="Logo Moto" class="logo-moto me-1">
+      <span class="moto">Moto</span><span class="rent">Rent</span><span class="cl-c">C</span><span class="cl-l">L</span>
+    </a>
+    <div class="ms-auto d-flex gap-3 align-items-center">
+      <a href="{% url 'arrendar' %}" class="nav-link boton-arrendar">🏍️Alquilar🏍️</a>
+      {% if request.session.usuario_nombre %}
+        <a href="{% url 'mi_perfil' %}" class="btn btn-nombre-usuario fw-bold">{{ request.session.usuario_nombre }}</a>
+        <form action="{% url 'logout' %}" method="POST" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-light text-dark">Cerrar sesión</button>
+        </form>
+      {% else %}
+        <a href="{% url 'registro' %}" class="btn btn-outline-light">Registro</a>
+        <a href="{% url 'login' %}" class="btn btn-light text-dark">Login</a>
+      {% endif %}
+      <a href="{% url 'contacto' %}" class="nav-link text-white">Contacto</a>
+    </div>
+  </div>
+</nav>
+
+
 <div class="container-fluid px-3 px-sm-5 my-5 contenedor-reserva">
   <div class="row justify-content-center">
     <div class="col-12 col-md-10 col-lg-8">
@@ -88,6 +112,20 @@
     calcularResumen();  // Mostrar resumen inicial
   });
 </script>
+
+
+<!-- Footer -->
+<footer class="mt-5">
+  <div style="height: 3px; background-color: #01857e;"></div>
+  <div style="background-color: #c2c2c2;" class="text-dark text-center py-2">
+    <p class="mb-1 fw-semibold">&copy; 2025 <strong>MotoRentCL</strong> - Todos los derechos reservados</p>
+    <p class="mb-0 small">
+      <strong>📞Ventas:</strong> +56 9 821 444 &nbsp;|&nbsp;
+      <strong>🏢Casa Matriz:</strong> Av. Lo Prado #3131 &nbsp;|&nbsp;
+      <strong>🚨Emergencias:</strong> +56 2 800 800 161
+    </p>
+  </div>
+</footer>
 
 </body>
 </html>
