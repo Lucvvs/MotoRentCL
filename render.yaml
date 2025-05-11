@@ -3,7 +3,7 @@ services:
     name: motorentcl-web
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: bash -c "echo '⛏ Ejecutando migrate...' && python manage.py migrate && echo '✅ Migraciones listas' && gunicorn MotoRentCL.wsgi"
+    startCommand: bash -c "echo 'Iniciando migración...' >> salida.txt && python manage.py migrate >> salida.txt 2>&1 && echo 'Migraciones completas' >> salida.txt && gunicorn MotoRentCL.wsgi"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
