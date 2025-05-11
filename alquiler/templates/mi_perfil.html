@@ -45,35 +45,42 @@
 <h3 class="text-center mb-4">Mis Reservas</h3>
 
 {% if reservas %}
-  <div class="table-responsive">
-    <table class="table table-bordered table-hover">
-      <thead class="table-dark">
+  <div class="table-responsive mt-4" style="overflow-x: auto;">
+    <table class="table table-hover align-middle border rounded shadow-sm" style="min-width: 900px;">
+      <thead style="background-color: #01857e; color: white;">
         <tr>
-          <th>Moto</th>
-          <th>Inicio</th>
-          <th>Fin</th>
-          <th>Total</th>
-          <th>Estado</th>
-          <th>Acciones</th>
+          <th class="px-4 py-3">🏍️ Moto</th>
+          <th class="px-4 py-3">📅 Inicio</th>
+          <th class="px-4 py-3">📅 Fin</th>
+          <th class="px-4 py-3">💰 Total</th>
+          <th class="px-4 py-3">⏳ Estado</th>
+          <th class="px-4 py-3 text-center">⚙️ Acciones</th>
         </tr>
       </thead>
       <tbody>
         {% for reserva in reservas %}
-          <tr>
-            <td>{{ reserva.motocicleta }}</td>
-            <td>{{ reserva.fecha_inicio }}</td>
-            <td>{{ reserva.fecha_fin }}</td>
-            <td>${{ reserva.total }}</td>
-            <td>{{ reserva.estado_pago }}</td>
-            <td>
+          <tr style="background-color: #fefefe;">
+            <td class="px-4">{{ reserva.motocicleta }}</td>
+            <td class="px-4">{{ reserva.fecha_inicio }}</td>
+            <td class="px-4">{{ reserva.fecha_fin }}</td>
+            <td class="px-4">${{ reserva.total }}</td>
+            <td class="px-4">
               {% if reserva.estado_pago == "PENDIENTE" %}
-                <a href="{% url 'modificar_reserva' reserva.id %}" class="btn btn-sm btn-warning">Editar</a>
+                <span class="badge bg-warning text-dark">Pendiente</span>
+              {% else %}
+                <span class="badge bg-success">Pagada</span>
+              {% endif %}
+            </td>
+            <td class="px-4 text-center">
+              {% if reserva.estado_pago == "PENDIENTE" %}
+                <a href="{% url 'modificar_reserva' reserva.id %}" class="btn btn-sm btn-outline-warning me-2">✏️ Editar</a>
                 <form action="{% url 'eliminar_reserva' reserva.id %}" method="POST" class="d-inline">
                   {% csrf_token %}
-                  <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que deseas eliminar esta reserva?')">Eliminar</button>
+                  <button type="submit" class="btn btn-sm btn-outline-danger"
+                          onclick="return confirm('¿Seguro que deseas eliminar esta reserva?')">🗑️ Eliminar</button>
                 </form>
               {% else %}
-                <span class="text-muted">Pagada</span>
+                <span class="text-muted">✔️ Pagada</span>
               {% endif %}
             </td>
           </tr>
@@ -82,7 +89,7 @@
     </table>
   </div>
 {% else %}
-  <p class="text-center text-muted">No tienes reservas registradas aún.</p>
+  <p class="text-center text-muted mt-4">No tienes reservas registradas aún.</p>
 {% endif %}
     <div class="col-md-8">
       <h2 class="text-center mb-4">Mi Perfil</h2>

@@ -43,17 +43,14 @@
   </div>
 </nav>
 
-<!-- Detalles de la moto -->
-<!-- Detalles de la moto en vertical -->
 <section class="container my-5">
-  <div class="row">
-    <!-- Columna de detalles -->
-    <div class="col-12 col-lg-6 mb-5">
-      <h2 class="text-center">{{ moto.make }} {{ moto.model }}</h2>
-
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8">
+      
+      <!-- Detalles de la moto -->
       <div class="text-center mb-4">
-        <img src="{% static 'img/motos/' %}{{ moto.model|slugify }}.png"
-             class="img-fluid img-motoalq" alt="{{ moto.model }}">
+        <h2>{{ moto.make }} {{ moto.model }}</h2>
+        <img src="{% static 'img/motos/' %}{{ moto.model|slugify }}.png" class="img-fluid img-motoalq" alt="{{ moto.model }}">
       </div>
 
       <ul class="list-unstyled mt-3 detalles-moto">
@@ -65,13 +62,11 @@
         <li class="item-detalle"><strong>Precio por día:</strong> ${{ moto.precio|floatformat:0 }} CLP</li>
       </ul>
 
-      <div class="text-center mt-4">
+      <div class="text-center mt-4 mb-5">
         <a href="{% url 'arrendar' %}" class="btn btn-outline-secondary">Cambiar modelo</a>
       </div>
-    </div>
 
-    <!-- Columna del formulario -->
-    <div class="col-12 col-lg-6">
+      <!-- Formulario de reserva -->
       <form method="POST" class="formulario-reserva border rounded p-4 bg-light shadow-sm" id="form-reserva">
         {% csrf_token %}
         <h4 class="text-center mt-2 mb-4">Reserva tu motocicleta</h4>
@@ -110,6 +105,7 @@
           <button type="reset" class="btn btn-secondary">Limpiar</button>
         </div>
       </form>
+
     </div>
   </div>
 </section>
