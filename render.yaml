@@ -2,12 +2,19 @@ services:
   - type: web
     name: motorentcl-web
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: bash -c "echo 'Iniciando migración...' >> salida.txt && python manage.py migrate >> salida.txt 2>&1 && echo 'Migraciones completas' >> salida.txt && gunicorn MotoRentCL.wsgi"
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+    startCommand: gunicorn MotoRentCL.wsgi
     envVars:
+      - key: RENDER
+        value: true
+      - key: SECRET_KEY
+        value: "@6)9#@f_%*%+7m(6l+@-xr+a+w&mc9mxo8)pbf)3e9@x8bg8u&"
       - key: DATABASE_URL
         fromDatabase:
           name: db_motorentcl
+          property: connectionString
 
 databases:
-  - name: db_motorentcl 
+  - name: db_motorentcl
