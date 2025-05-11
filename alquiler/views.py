@@ -497,3 +497,16 @@ def eliminar_reserva(request, pk):
         messages.success(request, "Reserva eliminada correctamente.")
 
     return redirect('mi_perfil')
+
+
+
+def crear_superusuario(request):
+    if not User.objects.filter(username='admin').exists():
+        User.objects.create_superuser(
+            username='admin',
+            email='admin@motorentcl.com',
+            password='ClaveSegura2025'
+        )
+        return HttpResponse("✅ Superusuario creado correctamente.")
+    else:
+        return HttpResponse("⚠️ El superusuario ya existe.")
