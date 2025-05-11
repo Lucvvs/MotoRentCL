@@ -801,11 +801,11 @@ h2 {
 
 .img-motoalq {
   width: 100%;
-  max-width: 100%; /* antes 500px */
-  height: auto;
+  max-width: 850px; 
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
   display: block;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 30px;
 }
