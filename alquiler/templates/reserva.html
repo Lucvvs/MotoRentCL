@@ -45,6 +45,7 @@
 <!-- Detalles de la moto -->
 <!-- Detalles de la moto en vertical -->
 <div class="container espaciado-sup contenedor-reserva">
+  <h2 class="text-center">{{ moto.make }} {{ moto.model }}</h2>
   <!-- Imagen -->
   <div class="text-center mb-4">
     <img src="{% static 'img/motos/' %}{{ moto.model|slugify }}.png" class="img-fluid img-motoalq" alt="{{ moto.model }}">
@@ -52,7 +53,7 @@
 
   <!-- Detalles -->
   <div class="mb-5 detalles-moto">
-    <h2 class="text-center">{{ moto.make }} {{ moto.model }}</h2>
+    
     <ul class="list-unstyled mt-3">
       <li class="item-detalle"><strong>Año:</strong> {{ moto.year }}</li>
       <li class="item-detalle"><strong>Potencia:</strong> {{ moto.power|default:"No especificada" }}</li>
